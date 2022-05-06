@@ -1,5 +1,7 @@
 ﻿# Список тестов
 * autotest1 - Тестирования загрузки изображений, поддерживаемых движком
+* autotest2 - Тестирование mbstowcsl и wcstombsl
+* autotest3 - Тестировани nyan_container_strings (Запись UTF16 строк)
 * test_imgui - Программа для тестирования враппера к dear imgui
 * test_mp - Тестирование враппера для magic particles (*old*, *obsolete*)
 * test_rix - Тестирования plg_rix
