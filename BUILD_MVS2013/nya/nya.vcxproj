@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{557441ED-474B-4F06-9648-01BE5AFAC4A0}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>nya</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <WindowsSDKDesktopARM64Support>true</WindowsSDKDesktopARM64Support>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(SolutionDir);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(SolutionDir);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
+    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <LinkIncremental>true</LinkIncremental>
+    <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(SolutionDir);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(SolutionDir);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);</LibraryPath>
+    <IncludePath>$(SolutionDir);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(SolutionDir);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir);$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;N_EXPORT;N_WINDOWS;_DEBUG;_WINDOWS;_USRDLL;NYA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;N_EXPORT;N_WINDOWS;_DEBUG;_WINDOWS;_USRDLL;NYA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;N_EXPORT;N_WINDOWS;_DEBUG;_WINDOWS;_USRDLL;NYA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>kernel32.lib;user32.lib;ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;N_EXPORT;N_WINDOWS;NDEBUG;_WINDOWS;_USRDLL;NYA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;N_EXPORT;N_WINDOWS;NDEBUG;_WINDOWS;_USRDLL;NYA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;N_EXPORT;N_WINDOWS;NDEBUG;_WINDOWS;_USRDLL;NYA_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>kernel32.lib;user32.lib;ole32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\extclib\mbstowcsl.c" />
+    <ClCompile Include="..\..\extclib\strlcpy.c" />
+    <ClCompile Include="..\..\nyan\nyan.c" />
+    <ClCompile Include="..\..\nyan\nyan_apifordlls.c" />
+    <ClCompile Include="..\..\nyan\nyan_au_init.c" />
+    <ClCompile Include="..\..\nyan\nyan_au_main.c" />
+    <ClCompile Include="..\..\nyan\nyan_filesys.c" />
+    <ClCompile Include="..\..\nyan\nyan_filesys_dirpaths.c" />
+    <ClCompile Include="..\..\nyan\nyan_fps.c" />
+    <ClCompile Include="..\..\nyan\nyan_getproc.c" />
+    <ClCompile Include="..\..\nyan\nyan_init.c" />
+    <ClCompile Include="..\..\nyan\nyan_log.c" />
+    <ClCompile Include="..\..\nyan\nyan_mem.c" />
+    <ClCompile Include="..\..\nyan\nyan_plgloader.c" />
+    <ClCompile Include="..\..\nyan\nyan_threads.c" />
+    <ClCompile Include="..\..\nyan\nyan_vis_3dlevel.c" />
+    <ClCompile Include="..\..\nyan\nyan_vis_3dmodel.c" />
+    <ClCompile Include="..\..\nyan\nyan_vis_draw.c" />
+    <ClCompile Include="..\..\nyan\nyan_vis_fonts.c" />
+    <ClCompile Include="..\..\nyan\nyan_vis_init.c" />
+    <ClCompile Include="..\..\nyan\nyan_vis_justdraw.c" />
+    <ClCompile Include="..\..\nyan\nyan_vis_matrixes.c" />
+    <ClCompile Include="..\..\nyan\nyan_vis_spritesheets.c" />
+    <ClCompile Include="..\..\nyan\nyan_vis_texture.c" />
+    <ClCompile Include="..\..\nyan\sys\win\nyan_sys_getproc.c" />
+    <ClCompile Include="..\..\nyan_container\nyan_container_ne_helpers.c" />
+    <ClCompile Include="..\..\nyan_container\nyan_container_strings.c" />
+    <ClCompile Include="..\..\plugins\plg_bmp.c" />
+    <ClCompile Include="..\..\plugins\plg_files.c" />
+    <ClCompile Include="..\..\plugins\plg_nek0.c" />
+    <ClCompile Include="..\..\plugins\plg_pcx.c" />
+    <ClCompile Include="..\..\plugins\plg_tga.c" />
+    <ClCompile Include="..\..\plugins\plg_wav.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\nyan\nyan_filesys_dirpaths.h" />
+    <ClInclude Include="..\..\nyan\nyan_filesys_dirpaths_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_apifordlls.h" />
+    <ClInclude Include="..\..\nyan\nyan_audiofile_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_au_init.h" />
+    <ClInclude Include="..\..\nyan\nyan_au_main.h" />
+    <ClInclude Include="..\..\nyan\nyan_decls_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_draw_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_engapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_file_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_filesys.h" />
+    <ClInclude Include="..\..\nyan\nyan_fps.h" />
+    <ClInclude Include="..\..\nyan\nyan_getproc.h" />
+    <ClInclude Include="..\..\nyan\nyan_init.h" />
+    <ClInclude Include="..\..\nyan\nyan_keycodes_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_log.h" />
+    <ClInclude Include="..\..\nyan\nyan_mem.h" />
+    <ClInclude Include="..\..\nyan\nyan_nalapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_nglapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_plgloader.h" />
+    <ClInclude Include="..\..\nyan\nyan_plgtypes_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_texformat_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_text.h" />
+    <ClInclude Include="..\..\nyan\nyan_threads.h" />
+    <ClInclude Include="..\..\nyan\nyan_threads_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_vismodes_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_3dlevel.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_3dmodel.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_draw.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_fonts.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_fonts_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_init.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_init_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_matrixes.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_matrixes_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_spritesheets.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_spritesheets_publicapi.h" />
+    <ClInclude Include="..\..\nyan\nyan_vis_texture.h" />
+    <ClInclude Include="..\..\nyan_container\nyan_container_defs.h" />
+    <ClInclude Include="..\..\nyan_container\nyan_container_ne_helpers.h" />
+    <ClInclude Include="..\..\nyan_container\nyan_container_strings.h" />
+    <ClInclude Include="..\..\plugins\plg_bmp.h" />
+    <ClInclude Include="..\..\plugins\plg_files.h" />
+    <ClInclude Include="..\..\plugins\plg_nek0.h" />
+    <ClInclude Include="..\..\plugins\plg_pcx.h" />
+    <ClInclude Include="..\..\plugins\plg_tga.h" />
+    <ClInclude Include="..\..\plugins\plg_wav.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

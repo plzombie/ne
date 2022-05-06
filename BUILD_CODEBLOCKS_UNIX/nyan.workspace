@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="nya/nya.cbp" />
+		<Project filename="ngl/ngl.cbp" />
+		<Project filename="nal/nal.cbp" />
+		<Project filename="nullgl/nullgl.cbp" />
+		<Project filename="nullal/nullal.cbp" />
+		<Project filename="audioplayer/audioplayer.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="autotest1/autotest1.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="autotest2/autotest2.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="autotest3/autotest3.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test1/test1.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test2/test2.cbp">
+			<Depends filename="nya/nya.cbp" />
+			<Depends filename="plgkplib_pictures/plgkplib_pictures.cbp" />
+		</Project>
+		<Project filename="test4/test4.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test5/test5.cbp">
+			<Depends filename="nya/nya.cbp" />
+			<Depends filename="plgwavpack/plgwavpack.cbp" />
+		</Project>
+		<Project filename="test6/test6.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test7/test7.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test8/test8.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test9/test9.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test10/test10.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test11/test11.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test12/test12.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test13/test13.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test14/test14.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test15/test15.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test_rix/test_rix.cbp">
+			<Depends filename="nya/nya.cbp" />
+			<Depends filename="plgrix/plgrix.cbp" />
+		</Project>
+		<Project filename="test_imgui/test_imgui.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="test_stb_easy_font/test_stb_easy_font.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="plgwavpack/plgwavpack.cbp" />
+		<Project filename="plgrix/plgrix.cbp" />
+		<Project filename="plgkplib_pictures/plgkplib_pictures.cbp" />
+		<Project filename="plgkplib_files/plgkplib_files.cbp" />
+		<Project filename="plgstb_image/plgstb_image.cbp" />
+		<Project filename="plgstb_vorbis/plgstb_vorbis.cbp" />
+		<Project filename="colorlines2013/colorlines2013.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="demo_dna/demo_dna.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="filecopy/filecopy.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="imageviewer/imageviewer.cbp">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+		<Project filename="sidescroller/sidescroller.cbp" active="1">
+			<Depends filename="nya/nya.cbp" />
+		</Project>
+	</Workspace>
+</CodeBlocks_workspace_file>

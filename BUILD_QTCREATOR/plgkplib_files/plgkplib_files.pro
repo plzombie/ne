@@ -1,0 +1,31 @@
+CONFIG -= qt
+TARGET = plgkplib_files
+TEMPLATE = lib
+
+CONFIG += dll
+
+unix {
+    target.path = /usr/lib
+    CONFIG += plugin no_plugin_name_prefix
+    INSTALLS += target
+    DEFINES += N_POSIX N_WCHAR32
+    QMAKE_CFLAGS += -fvisibility=hidden
+    QMAKE_LFLAGS = -s
+}
+windows {
+    DEFINES += N_WINDOWS _CRT_SECURE_NO_WARNINGS
+}
+
+CONFIG(debug, debug|release) {
+    DESTDIR = ../output/debug
+    LIBS += -L../output/debug
+} else {
+    DESTDIR = ../output/release
+    LIBS += -L../output/release
+}
+
+SOURCES += \
+    ../../extclib/wcstombsl.c \
+    ../../plugins/dll_plg_kplib_files.c \
+    ../../forks/kplib_c/kplib_fileio.c \
+    ../../forks/kplib_c/kplib_globalshit_kzfs.c

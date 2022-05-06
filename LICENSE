@@ -1,0 +1,331 @@
+Copyright (c) 2012-2018 Mikhail Morozov
+
+This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable for any damages arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose, including commercial applications, and to alter it and redistribute it freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.
+
+2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
+
+3. This notice may not be removed or altered from any source distribution.
+
+----------------------------------------------------------------------
+
+All main libraries (nya.dll, ngl.dll, nal.dll under windows, all tests, all game data, most tools) are under zlib/libpng license.
+
+Next files distributed under their own licenses.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+For "tools\md2tonek2\1Q2PART.h", "tools\md2tonek2\md2tonek2.c" and md2tonek2 tool
+----------------------------------------------------------------------------------
+/*
+Copyright (C) 2016 plzombie.
+Copyright (C) 1997-2001 Id Software, Inc.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+*/
+
+++++++++++++++++++++++++++++++++
+For keysym2ucs.c, keysym2ucs.h:
+/*Used under unices with X11*/
+--------------------------------
+ * Author: Markus G. Kuhn <http://www.cl.cam.ac.uk/~mgk25/>,
+ *         University of Cambridge, April 2001
+ *
+ * Special thanks to Richard Verhoeven <river@win.tue.nl> for preparing
+ * an initial draft of the mapping table.
+ *
+ * This software is in the public domain. Share and enjoy!
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+For wavpackdll.dll and all files/folders in "forks/wavpack" folder:
+Original software distributed under license
+--------------------------------------------------------------------
+                  Copyright (c) 1998 - 2017 David Bryant
+                          All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+    * Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of Conifer Software nor the names of its contributors
+      may be used to endorse or promote products derived from this software
+      without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+For all files/folders in "forks/tinygl" folder:
+This is modified version of software
+I'm not a author of original software
+Original software distributed under license
+--------------------------------------------------------
+Copyright notice:
+
+ (C) 1997-1998 Fabrice Bellard
+
+  This software is provided 'as-is', without any express or implied
+  warranty.  In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product and its documentation 
+     *is* required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+If you redistribute modified sources, I would appreciate that you
+include in the files history information documenting your changes.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+For mini.xm and all files/folders in forks/ufmod (except ufmod_misc.*):
+------------------------------------------------------------------------
+Copyright
+
+uFMOD sources, binaries and utility programs © 2005 - 2008 Asterix and Quantum.
+All rights reserved.
+
+Sample tunes:
+•Minimal III © 2006 - 2008 SofT MANiAC (CoolPHat).
+
++++++++++++++++++++++++++++++++++++++++
+For...
+	all files in forks/mparticles/
+	magic.dll and magic_x64.dll
+	matrix.ptc
+	media/matrix.png
+---------------------------------------
+ Copyright (c) Astralax. All rights reserved.
+ Author: Sedov Alexey
+
+++++++++++++++++++++++++++++++++++++++++++
+For kplib and all files in forks/kplib_c:
+Derived from kplib.c
+------------------------------------------
+KPLIB.C: Ken's Picture LIBrary written by Ken Silverman
+Copyright (c) 1998-2008 Ken Silverman
+Ken Silverman's official web site: http://advsys.net/ken
+
+++++++++++++++++++++++++++
+zazaka.png taken from HGE
+--------------------------
+Haaf's Game Engine 1.81
+Copyright (C) 2003-2008, Relish Games
+http://hge.relishgames.com
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Orgo 3d model and weapon
+tris.mdl and weapon.mdl, files in media/players/ogro
+tris.nek2 and weapon.nek2 converted from original
+-----------------------------------------------------
+see media\players\ogro\Ogro.txt
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+For dear imgui
+Example tests/test_imgui.cpp and all files in fork/imgui folder
+(imgui_impl_ne.cpp and imgui_impl_ne.h was written from scratch)
+-----------------------------------------------------------------
+The MIT License (MIT)
+
+Copyright (c) 2014-2015 Omar Cornut and ImGui contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+++++++++++++++++++++++
+For files in forks/gl
+----------------------
+/*
+** Copyright (c) 2007-2012 The Khronos Group Inc.
+** 
+** Permission is hereby granted, free of charge, to any person obtaining a
+** copy of this software and/or associated documentation files (the
+** "Materials"), to deal in the Materials without restriction, including
+** without limitation the rights to use, copy, modify, merge, publish,
+** distribute, sublicense, and/or sell copies of the Materials, and to
+** permit persons to whom the Materials are furnished to do so, subject to
+** the following conditions:
+** 
+** The above copyright notice and this permission notice shall be included
+** in all copies or substantial portions of the Materials.
+** 
+** THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+** IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+** CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+** TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+** MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+*/
+
++++++++++++++++++++
+For media/test.txt
+-------------------
+Based on https://ja.wikipedia.org/wiki/X_JAPAN available under the Creative Commons Attribution-ShareAlike License; additional terms may apply.
+
+++++++++++++++++++++++++++++
+For media/Karla-Regular.ttf
+----------------------------
+Copyright (c) 2011-2012, Jonathan Pinhorn (jonpinhorn.typedesign@gmail.com), with Reserved Font Names 'Karla'
+
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+This license is copied below, and is also available with a FAQ at:
+http://scripts.sil.org/OFL
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+For media/fonts/testfont.nek1 and media/fonts/testfont.tga:
+"testfont" derived from "Noto Sans CJK JP Regular" font,
+version 1.004, which may be downloaded from
+https://www.google.com/get/noto/
+It contains glyphs to render "media/test.txt" text file.
+Since license file from package doesn't contained copyright
+section, it was extracted from ".otf" file itself.
+------------------------------------------------------------
+
+Noto is a trademark of Google Inc.
+
+Copyright 2014, 2015 Adobe Systems Incorporated (http://www.adobe.com/).
+
+This Font Software is licensed under the SIL Open Font License,
+Version 1.1.
+
+
+This license is copied below, and is also available with a FAQ at:
+http://scripts.sil.org/OFL
+
+-----------------------------------------------------------
+SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
+-----------------------------------------------------------
+
+PREAMBLE
+The goals of the Open Font License (OFL) are to stimulate worldwide
+development of collaborative font projects, to support the font creation
+efforts of academic and linguistic communities, and to provide a free and
+open framework in which fonts may be shared and improved in partnership
+with others.
+
+The OFL allows the licensed fonts to be used, studied, modified and
+redistributed freely as long as they are not sold by themselves. The
+fonts, including any derivative works, can be bundled, embedded, 
+redistributed and/or sold with any software provided that any reserved
+names are not used by derivative works. The fonts and derivatives,
+however, cannot be released under any other type of license. The
+requirement for fonts to remain under this license does not apply
+to any document created using the fonts or their derivatives.
+
+DEFINITIONS
+"Font Software" refers to the set of files released by the Copyright
+Holder(s) under this license and clearly marked as such. This may
+include source files, build scripts and documentation.
+
+"Reserved Font Name" refers to any names specified as such after the
+copyright statement(s).
+
+"Original Version" refers to the collection of Font Software components as
+distributed by the Copyright Holder(s).
+
+"Modified Version" refers to any derivative made by adding to, deleting,
+or substituting -- in part or in whole -- any of the components of the
+Original Version, by changing formats or by porting the Font Software to a
+new environment.
+
+"Author" refers to any designer, engineer, programmer, technical
+writer or other person who contributed to the Font Software.
+
+PERMISSION & CONDITIONS
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of the Font Software, to use, study, copy, merge, embed, modify,
+redistribute, and sell modified and unmodified copies of the Font
+Software, subject to the following conditions:
+
+1) Neither the Font Software nor any of its individual components,
+in Original or Modified Versions, may be sold by itself.
+
+2) Original or Modified Versions of the Font Software may be bundled,
+redistributed and/or sold with any software, provided that each copy
+contains the above copyright notice and this license. These can be
+included either as stand-alone text files, human-readable headers or
+in the appropriate machine-readable metadata fields within text or
+binary files as long as those fields can be easily viewed by the user.
+
+3) No Modified Version of the Font Software may use the Reserved Font
+Name(s) unless explicit written permission is granted by the corresponding
+Copyright Holder. This restriction only applies to the primary font name as
+presented to the users.
+
+4) The name(s) of the Copyright Holder(s) or the Author(s) of the Font
+Software shall not be used to promote, endorse or advertise any
+Modified Version, except to acknowledge the contribution(s) of the
+Copyright Holder(s) and the Author(s) or with their explicit written
+permission.
+
+5) The Font Software, modified or unmodified, in part or in whole,
+must be distributed entirely under this license, and must not be
+distributed under any other license. The requirement for fonts to
+remain under this license does not apply to any document created
+using the Font Software.
+
+TERMINATION
+This license becomes null and void if any of the above conditions are
+not met.
+
+DISCLAIMER
+THE FONT SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT
+OF COPYRIGHT, PATENT, TRADEMARK, OR OTHER RIGHT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+INCLUDING ANY GENERAL, SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL
+DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
+OTHER DEALINGS IN THE FONT SOFTWARE.
+

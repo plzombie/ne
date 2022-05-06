@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="nya" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../bin/Debug/nya" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../obj/Debug/nya" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../bin/Release/nya" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="" />
+				<Option object_output="../obj/Release/nya/" />
+				<Option type="2" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O3" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-DN_WCHAR32" />
+			<Add option="-DN_STATIC" />
+			<Add option="-DN_POSIX" />
+			<Add option="-pthread" />
+			<Add directory="/usr/local/include/" />
+		</Compiler>
+		<Linker>
+			<Add option="-pthread" />
+			<Add library="dl" />
+			<Add directory="/usr/local/lib/" />
+		</Linker>
+		<Unit filename="../../extclib/mbstowcsl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../extclib/strlcpy.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../extclib/wcstombsl.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_apifordlls.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_au_init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_au_main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_filesys.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_filesys_dirpaths.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_fps.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_getproc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_log.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_mem.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_plgloader.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_threads.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_vis_3dlevel.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_vis_3dmodel.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_vis_draw.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_vis_fonts.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_vis_init.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_vis_justdraw.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_vis_matrixes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_vis_spritesheets.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/nyan_vis_texture.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan/sys/unix/nyan_sys_getproc.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan_container/nyan_container_ne_helpers.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../nyan_container/nyan_container_strings.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../openal_soundlib/nal.h" />
+		<Unit filename="../../opengl_render/ngl.h" />
+		<Unit filename="../../plugins/plg_bmp.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../plugins/plg_files.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../plugins/plg_nek0.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../plugins/plg_pcx.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../plugins/plg_tga.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../plugins/plg_wav.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../unixsupport/filelength.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../unixsupport/waccess.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../unixsupport/wchmod.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../unixsupport/wfopen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../unixsupport/wfsopen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../unixsupport/wmkdir.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../unixsupport/wopen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../unixsupport/wsopen.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../unixsupport/wremove.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../../unixsupport/wrmdir.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output />
+				<doxyfile_dot />
+				<general />
+			</DoxyBlocks>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

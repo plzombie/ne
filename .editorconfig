@@ -1,0 +1,8 @@
+
+root = true
+
+[{causeway_import,commonsrc,demos,extclib,forks/kplib,games,*_render,*_soundlib,nyan*,plugins,tests,unixsupport}/**.{c,cpp,h}]
+end_of_line = crlf
+charset = utf-8
+indent_style = tab
+insert_final_newline = true

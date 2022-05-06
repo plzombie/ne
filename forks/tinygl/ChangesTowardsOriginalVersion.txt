@@ -1,0 +1,6 @@
+﻿* Много чего выкинул
+* Убрал варнинги в вижуалстудии. Возможно, сломал что-то ^^
+
+* Deleted unused code
+* Fixed warnings in visualstudio
+

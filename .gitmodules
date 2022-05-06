@@ -1,0 +1,6 @@
+[submodule "forks/imgui"]
+	path = forks/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "forks/stb"]
+	path = forks/stb
+	url = https://github.com/nothings/stb
