@@ -1,7 +1,11 @@
 ﻿# Nyan engine
 ## Описание
 Очередной самописный игровой движок.
+
 Примеры использования - см. *BUILD_MVS2013/nya.sln*.
+
+Статус сборки Travis CI ![Travis CI](https://app.travis-ci.com/plzombie/ne.svg?branch=master).
+
 ## Как скачать
 Наберите в консоли:
 
