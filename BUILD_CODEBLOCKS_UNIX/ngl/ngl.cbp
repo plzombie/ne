@@ -46,6 +46,7 @@
 			<Add library="X11" />
 			<Add library="Xxf86vm" />
 			<Add library="rt" />
+			<Add library="m" />
 			<Add directory="/usr/local/lib/" />
 		</Linker>
 		<Unit filename="../../extclib/mbstowcsl.c">

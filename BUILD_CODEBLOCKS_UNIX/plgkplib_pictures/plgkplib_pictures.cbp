@@ -39,6 +39,9 @@
 			<Add option="-fvisibility=hidden" />
 			<Add option="-DN_POSIX" />
 		</Compiler>
+		<Linker>
+			<Add library="m" />
+		</Linker>
 		<Unit filename="../../forks/kplib_c/kplib_globalshit.c">
 			<Option compilerVar="CC" />
 		</Unit>

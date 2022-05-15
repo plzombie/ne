@@ -13,6 +13,7 @@
 git clone https://github.com/plzombie/ne.git
 cd ne
 git submodule init
+git submodule update --recursive
 ~~~
 
 Чтобы обновить субмодули наберите:

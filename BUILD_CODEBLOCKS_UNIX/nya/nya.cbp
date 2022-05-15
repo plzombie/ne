@@ -46,6 +46,7 @@
 		<Linker>
 			<Add option="-pthread" />
 			<Add library="dl" />
+			<Add library="m" />
 			<Add directory="/usr/local/lib/" />
 		</Linker>
 		<Unit filename="../../extclib/mbstowcsl.c">
