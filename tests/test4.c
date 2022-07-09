@@ -17,7 +17,11 @@ NYAN_MAIN
 
 
 	if(!nvAttachRender(L"ngl")) return 0;
-	if(!naAttachLib(L"nal")) return 0;
+#if defined(_M_ARM) || defined(_M_ARM64)
+	if (!naAttachLib(L"xaudio2_8al")) return 0;
+#else
+	if (!naAttachLib(L"nal")) return 0;
+#endif
 
 	nvSetStatusi(NV_STATUS_WINUPDATEINTERVAL, 16);
 
