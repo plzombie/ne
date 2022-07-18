@@ -36,8 +36,11 @@ int wmain(int argc, wchar_t **argv)
 
 	nlEnable(false);
 
-	if(!naAttachLib(L"nal"))
-		return 1;
+#if defined(_M_ARM) || defined(_M_ARM64)
+	if (!naAttachLib(L"xaudio2_8al")) return 1;
+#else
+	if (!naAttachLib(L"nal")) return 1;
+#endif
 
 	if(!nvAttachRender(L"nullgl"))
 		return 2;
