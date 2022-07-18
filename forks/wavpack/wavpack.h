@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 //                           **** WAVPACK ****                            //
 //                  Hybrid Lossless Wavefile Compressor                   //
-//                Copyright (c) 1998 - 2016 David Bryant.                 //
+//                Copyright (c) 1998 - 2022 David Bryant.                 //
 //                          All Rights Reserved.                          //
 //      Distributed under the BSD Software License (see license.txt)      //
 ////////////////////////////////////////////////////////////////////////////
@@ -146,6 +146,15 @@ typedef struct {
 #define MIN_STREAM_VERS     0x402       // lowest stream version we'll decode
 #define MAX_STREAM_VERS     0x410       // highest stream version we'll decode or encode
 
+#define WAVPACK_MAX_CHANS       4096    // max channels handled by WavPack format & library
+
+// This sets the maximum number of channels that the current WavPack CLI applications
+// accept. It's somewhat arbitrary because the actual WavPack format and library can
+// handle up to 4096 channels. However, anything beyond 256 channels is obviously
+// a niche case and is not well tested, so this lower limit is defined for now.
+
+#define WAVPACK_MAX_CLI_CHANS   256
+
 // These are the mask bit definitions for the metadata chunk id byte (see format.txt)
 
 #define ID_UNIQUE               0x3f
@@ -167,6 +176,7 @@ typedef struct {
 #define ID_WVC_BITSTREAM        0xb
 #define ID_WVX_BITSTREAM        0xc
 #define ID_CHANNEL_INFO         0xd
+#define ID_DSD_BLOCK            0xe
 
 #define ID_RIFF_HEADER          (ID_OPTIONAL_DATA | 0x1)
 #define ID_RIFF_TRAILER         (ID_OPTIONAL_DATA | 0x2)
@@ -178,6 +188,7 @@ typedef struct {
 #define ID_ALT_EXTENSION        (ID_OPTIONAL_DATA | 0x8)
 #define ID_ALT_MD5_CHECKSUM     (ID_OPTIONAL_DATA | 0x9)
 #define ID_NEW_CONFIG_BLOCK     (ID_OPTIONAL_DATA | 0xa)
+#define ID_CHANNEL_IDENTITIES   (ID_OPTIONAL_DATA | 0xb)
 #define ID_BLOCK_CHECKSUM       (ID_OPTIONAL_DATA | 0xf)
 
 ///////////////////////// WavPack Configuration ///////////////////////////////
@@ -209,7 +220,7 @@ typedef struct {
 #define CONFIG_DYNAMIC_SHAPING  0x20000 // dynamic noise shaping
 #define CONFIG_CREATE_EXE       0x40000 // create executable
 #define CONFIG_CREATE_WVC       0x80000 // create correction file
-#define CONFIG_OPTIMIZE_WVC     0x100000 // maximize bybrid compression
+#define CONFIG_OPTIMIZE_WVC     0x100000 // maximize hybrid compression
 #define CONFIG_COMPATIBLE_WRITE 0x400000 // write files for decoders < 4.3
 #define CONFIG_CALC_NOISE       0x800000 // calc noise in hybrid mode
 #define CONFIG_EXTRA_MODE       0x2000000 // extra processing mode
@@ -280,7 +291,7 @@ typedef int (*WavpackBlockOutput)(void *id, void *data, int32_t bcount);
 
 //////////////////////////// function prototypes /////////////////////////////
 
-typedef void WavpackContext;
+typedef struct WavpackContext WavpackContext;
 
 #ifdef __cplusplus
 extern "C" {
@@ -385,7 +396,7 @@ int WavpackWriteTag (WavpackContext *wpc);
 WavpackContext *WavpackOpenFileOutput (WavpackBlockOutput blockout, void *wv_id, void *wvc_id);
 void WavpackSetFileInformation (WavpackContext *wpc, char *file_extension, unsigned char file_format);
 
-#define WP_FORMAT_WAV   0       // Microsoft RIFF, including BWF and RF64 varients
+#define WP_FORMAT_WAV   0       // Microsoft RIFF, including BWF and RF64 variants
 #define WP_FORMAT_W64   1       // Sony Wave64
 #define WP_FORMAT_CAF   2       // Apple CoreAudio
 #define WP_FORMAT_DFF   3       // Philips DSDIFF

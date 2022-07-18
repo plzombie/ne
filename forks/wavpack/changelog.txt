@@ -1,3 +1,92 @@
+                       ----------------------------
+                       Release 5.5.0 - July 7, 2022
+                       ----------------------------
+
+ WavPack Library Source Code - 5.5.0
+ wavpack.exe (command-line encoder) - 5.5.0
+ wvunpack.exe (command-line decoder) - 5.5.0
+ wvgain.exe (command-line ReplayGain scanner) - 5.5.0
+ wvtag.exe (command-line tagging utility) - 5.5.0
+ ----------------------------------------------------
+  fixed: CVE-2021-44269 (encoding crafted DSD file triggers OOB read crash)
+  fixed: very long filenames cause stack-overflow crash in all CLI programs
+  fixed: the length stored in WAV headers not always corrected when using -i
+  fixed: attempting to encode raw DSD audio from stdin sometimes causes crash
+  fixed: DSD to PCM decimation: small clicks between tracks and tiny DC offset
+  fixed: length update in library-generated WAV headers on big-endian machines
+  fixed: sanitize custom extensions read from WavPack files to be alphanumeric
+  added: accepting brace-delimited options in the wavpack executable filename
+  added: "--drop" option to Windows executables for multi-file "drag-and-drop"
+  added" "--raw-pcm" option to wvunpack executable (does DSD --> 24-bit PCM)
+  added: "--no-overwrite" option to wavpack executable (to resume sessions)
+  improved: build system clean-up including switch to non-recursive "make"
+
+
+                     --------------------------------
+                     Release 5.4.0 - January 10, 2021
+                     --------------------------------
+
+ WavPack Library Source Code - 5.4.0
+ wavpack.exe (command-line encoder) - 5.4.0
+ wvunpack.exe (command-line decoder) - 5.4.0
+ wvgain.exe (command-line ReplayGain scanner) - 5.4.0
+ wvtag.exe (command-line tagging utility) - 5.4.0
+ ----------------------------------------------------
+  fixed: potential security issue CVE-2020-35738
+  fixed: disable A32 asm code when building for Apple silicon
+  fixed: issues with Adobe-style floating-point WAV files
+  added: -vv option to wvunpack to quickly verify using just
+         block checksums (ideal for detecting corrupted files)
+  added: --normalize-floats option to wvunpack for correctly
+         exporting un-normalized floating-point files
+  updated: Visual Studio 2019 for Windows builds
+  dropped: WinXP support in official binaries
+
+
+                      ------------------------------
+                      Release 5.3.0 - April 14, 2020
+                      ------------------------------
+
+ WavPack Library Source Code - 5.3.0
+ wavpack.exe (command-line encoder) - 5.3.0
+ wvunpack.exe (command-line decoder) - 5.3.0
+ wvgain.exe (command-line ReplayGain scanner) - 5.3.0
+ wvtag.exe (command-line tagging utility) - 5.3.0
+ ----------------------------------------------------
+  fixed: OSS-Fuzz issues 19925, 19928, 20060, 20448
+          (no CVEs or vulnerabilities)
+  fixed: trailing garbage characters on imported ID3v2 TXXX tags
+  fixed: various minor undefined behavior and memory access issues
+  fixed: sanitize tag extraction names for length and path inclusion
+  improved: reformat wvunpack "help" and split into long + short versions
+  added: regression testing to Travis CI for OSS-Fuzz crashers
+
+
+                     ---------------------------------
+                     Release 5.2.0 - December 15, 2019
+                     ---------------------------------
+
+ WavPack Library Source Code - 5.2.0
+ wavpack.exe (command-line encoder) - 5.2.0
+ wvunpack.exe (command-line decoder) - 5.2.0
+ wvgain.exe (command-line ReplayGain scanner) - 5.2.0
+ wvtag.exe (command-line tagging utility) - 5.2.0
+ ----------------------------------------------------
+  fixed: potential security issues including the following CVEs:
+         CVE-2018-19840 CVE-2018-19841 CVE-2018-10536
+         CVE-2018-10537 CVE-2018-10538 CVE-2018-10539
+         CVE-2018-10540 CVE-2018-7254  CVE-2018-7253
+         CVE-2018-6767
+  added: support for CMake, Travis CI, and Google's OSS-fuzz
+  fixed: use correction file for encode verify (pipe input, Windows)
+  fixed: correct WAV header with actual length (pipe input, -i option)
+  fixed: thumb interworking and not needing v6 architecture (ARM asm)
+  added: handle more ID3v2.3 tag items and from all file types
+  fixed: coredump on Sparc64 (changed MD5 implementation)
+  fixed: handle invalid ID3v2.3 tags from sacd-ripper
+  fixed: several corner-case memory leaks
+
+
                       --------------------------------
                       Release 5.1.0 - January 18, 2017
                       --------------------------------
@@ -160,7 +249,7 @@
   fixed: crashing bug related to hybrid files with DNS
   fixed: custom sampling rates being ignored
 
-  
+
                       ---------------------------------
                       Release 4.70.0 - October 19, 2013
                       ---------------------------------
@@ -183,7 +272,7 @@
   fixed: memcpy() not always used correctly (Linux targets)
   fixed: unsigned char issue (ARM targets)
   fixed: add binary tag functions to Windows DLL exports (forgot on 4.60)
-  added: read-only access to APEv2 tags that come at the beginning of files 
+  added: read-only access to APEv2 tags that come at the beginning of files
   improved: switched to Microsoft Visual Studio 2008 (win32 only)
 
  wvunpack.exe (command-line decoder) - 4.70.0
@@ -477,8 +566,8 @@
          old "high" mode but decodes significantly faster; old "high" mode
          now available as "v. high"
   improved: more robust handling of corrupt files
-  
-  
+
+
                         ----------------------
                         Update - April 5, 2006
                         ----------------------
