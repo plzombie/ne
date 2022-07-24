@@ -29,6 +29,9 @@
   <ItemGroup>
     <ClCompile Include="..\..\tests\test1.c" />
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="..\..\resources\applications.manifest" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{517ADF65-F8E9-46FA-8976-780692D8698A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

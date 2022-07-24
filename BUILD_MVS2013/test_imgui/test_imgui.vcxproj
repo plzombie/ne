@@ -224,6 +224,9 @@
     <ClInclude Include="..\..\forks\imgui\imgui.h" />
     <ClInclude Include="..\..\forks\imgui\imgui_internal.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="..\..\resources\applications.manifest" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

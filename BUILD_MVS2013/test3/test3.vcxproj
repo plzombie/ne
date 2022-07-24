@@ -154,6 +154,9 @@
   <ItemGroup>
     <Object Include="..\..\forks\ufmod\ufmod.obj" />
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="..\..\resources\applications.manifest" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

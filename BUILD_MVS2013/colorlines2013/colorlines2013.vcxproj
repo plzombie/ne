@@ -230,6 +230,9 @@
     <ClInclude Include="..\..\games\colorlines2013\cl_score.h" />
     <ClInclude Include="..\..\games\colorlines2013\cl_sdifficulty.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="..\..\resources\applications.manifest" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

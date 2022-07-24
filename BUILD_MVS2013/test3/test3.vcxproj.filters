@@ -25,4 +25,7 @@
   <ItemGroup>
     <Object Include="..\..\forks\ufmod\ufmod.obj" />
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="..\..\resources\applications.manifest" />
+  </ItemGroup>
 </Project>

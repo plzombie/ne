@@ -45,4 +45,7 @@
       <Filter>imgui</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="..\..\resources\applications.manifest" />
+  </ItemGroup>
 </Project>

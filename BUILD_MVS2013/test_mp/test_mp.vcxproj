@@ -214,6 +214,9 @@
     <ClCompile Include="..\..\forks\mparticles\platform_win_posix.cpp" />
     <ClCompile Include="..\..\tests\test_mp.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="..\..\resources\applications.manifest" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
