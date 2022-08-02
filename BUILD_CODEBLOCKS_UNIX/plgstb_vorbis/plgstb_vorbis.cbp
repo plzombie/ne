@@ -39,9 +39,6 @@
 			<Add option="-fvisibility=hidden" />
 			<Add option="-DN_POSIX" />
 		</Compiler>
-		<Linker>
-			<Add library="m" />
-		</Linker>
 		<Unit filename="../../plugins/dll_plg_stb_vorbis.c">
 			<Option compilerVar="CC" />
 		</Unit>

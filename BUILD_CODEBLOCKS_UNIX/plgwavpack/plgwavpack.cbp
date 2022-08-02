@@ -41,7 +41,6 @@
 		</Compiler>
 		<Linker>
 			<Add library="wavpack" />
-			<Add library="m" />
 			<Add directory="/usr/local/lib/" />
 		</Linker>
 		<Unit filename="../../plugins/dll_plg_wv.c">

@@ -42,7 +42,6 @@
 		</Compiler>
 		<Linker>
 			<Add library="openal" />
-			<Add library="m" />
 			<Add directory="/usr/local/lib/" />
 		</Linker>
 		<Unit filename="../../extclib/mbstowcsl.c">

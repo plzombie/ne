@@ -51,7 +51,6 @@
 			<Add option="-pthread" />
 			<Add library="dl" />
 			<Add library="rt" />
-			<Add library="m" />
 			<Add directory="/usr/local/lib/" />
 		</Linker>
 		<Unit filename="../../demos/demo_dna.c">
