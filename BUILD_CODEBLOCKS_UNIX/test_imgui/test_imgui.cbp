@@ -51,12 +51,12 @@
 			<Add option="-pthread" />
 			<Add library="dl" />
 			<Add library="rt" />
-			<Add library="m" />
 			<Add directory="/usr/local/lib/" />
 		</Linker>
 		<Unit filename="../../forks/imgui/imgui.cpp" />
 		<Unit filename="../../forks/imgui/imgui_demo.cpp" />
 		<Unit filename="../../forks/imgui/imgui_draw.cpp" />
+		<Unit filename="../../forks/imgui/imgui_widgets.cpp" />
 		<Unit filename="../../nyan_imgui/imgui_impl_ne.cpp" />
 		<Unit filename="../../tests/test_imgui.cpp" />
 		<Extensions>

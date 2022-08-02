@@ -171,7 +171,7 @@ void ImGui_ImplNyan_Shutdown(void)
 	}
 	imgui_implnyan_varray = 0;
 
-	ImGui::DestroyContext(); // Удалится текущий контекст
+	ImGui::DestroyContext(); // РЈРґР°Р»РёС‚СЃСЏ С‚РµРєСѓС‰РёР№ РєРѕРЅС‚РµРєСЃС‚
 }
 
 static void ImGui_ImplNyan_RenderDrawLists(ImDrawData *draw_data)
