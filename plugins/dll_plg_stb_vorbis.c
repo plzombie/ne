@@ -235,4 +235,5 @@ void N_APIENTRY stb_vorbis_plgUnload(na_audiofile_type *aud)
 {
 	stb_vorbis_close(((stb_vorbis_plgdata_type *)aud->plgdata)->vf);
 	ea->nFreeMemory(((stb_vorbis_plgdata_type *)aud->plgdata)->buf);
+	ea->nFreeMemory(aud->plgdata);
 }

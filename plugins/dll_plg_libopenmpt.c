@@ -238,7 +238,6 @@ bool N_APIENTRY libopenmpt_plgRead(unsigned int offset, unsigned int nofs, void 
 	}
 	
 	if(frames_read != (size_t)nofs) {
-		wprintf(L"gotcha");
 		memset((short *)buf+frames_read*aud->noc, 0, (nofs-frames_read)*aud->noc*sizeof(short));
 	}
 
