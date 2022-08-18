@@ -1,9 +1,9 @@
 /*
-	Ôàéë	: dll_plg_stb_vorbis.c
+	Ğ¤Ğ°Ğ¹Ğ»	: dll_plg_stb_vorbis.c
 
-	Îïèñàíèå: Ïëàãèí äëÿ çàãğóçêè òğåêåğíûõ ìîäóëåé ÷åğåç libopenmpt
+	ĞĞ¿Ğ¸ÑĞ°Ğ½Ğ¸Ğµ: ĞŸĞ»Ğ°Ğ³Ğ¸Ğ½ Ğ´Ğ»Ñ Ğ·Ğ°Ğ³Ñ€ÑƒĞ·ĞºĞ¸ Ñ‚Ñ€ĞµĞºĞµÑ€Ğ½Ñ‹Ñ… Ğ¼Ğ¾Ğ´ÑƒĞ»ĞµĞ¹ Ñ‡ĞµÑ€ĞµĞ· libopenmpt
 
-	Èñòîğèÿ	: 18.08.22	Ñîçäàí
+	Ğ˜ÑÑ‚Ğ¾Ñ€Ğ¸Ñ	: 18.08.22	Ğ¡Ğ¾Ğ·Ğ´Ğ°Ğ½
 
 */
 
@@ -41,17 +41,16 @@ plg_api_type plg_api = {sizeof(plg_api_type), N_PLG_TYPE_AFLOADER, L"Tracker mod
 
 typedef struct {
 	openmpt_module *module;
-	unsigned char *buf;
 	int16_t *lbuf, *rbuf;
 	size_t samples_offset;
 } libopenmpt_plgdata_type;
 
 /*
-	Ôóíêöèÿ	: plgGetApi
+	Ğ¤ÑƒĞ½ĞºÑ†Ğ¸Ñ	: plgGetApi
 
-	Îïèñàíèå: Âîçâğàùàåò API ïëàãèíà
+	ĞĞ¿Ğ¸ÑĞ°Ğ½Ğ¸Ğµ: Ğ’Ğ¾Ğ·Ğ²Ñ€Ğ°Ñ‰Ğ°ĞµÑ‚ API Ğ¿Ğ»Ğ°Ğ³Ğ¸Ğ½Ğ°
 
-	Èñòîğèÿ	: 18.08.22	Ñîçäàí
+	Ğ˜ÑÑ‚Ğ¾Ñ€Ğ¸Ñ	: 18.08.22	Ğ¡Ğ¾Ğ·Ğ´Ğ°Ğ½
 
 */
 N_API plg_api_type * N_APIENTRY plgGetApi(void)
@@ -62,11 +61,11 @@ N_API plg_api_type * N_APIENTRY plgGetApi(void)
 }
 
 /*
-	Ôóíêöèÿ	: plgSetupDll
+	Ğ¤ÑƒĞ½ĞºÑ†Ğ¸Ñ	: plgSetupDll
 
-	Îïèñàíèå: Íàñòğîéêà dll ïëàãèíà
+	ĞĞ¿Ğ¸ÑĞ°Ğ½Ğ¸Ğµ: ĞĞ°ÑÑ‚Ñ€Ğ¾Ğ¹ĞºĞ° dll Ğ¿Ğ»Ğ°Ğ³Ğ¸Ğ½Ğ°
 
-	Èñòîğèÿ	: 18.08.22	Ñîçäàí
+	Ğ˜ÑÑ‚Ğ¾Ñ€Ğ¸Ñ	: 18.08.22	Ğ¡Ğ¾Ğ·Ğ´Ğ°Ğ½
 
 */
 N_API bool N_APIENTRY plgSetupDll(engapi_type *engapi)
@@ -85,16 +84,16 @@ N_API bool N_APIENTRY plgSetupDll(engapi_type *engapi)
 }
 
 /*
-	Ôóíêöèÿ	: stb_vorbis_plgSupportExt
+	Ğ¤ÑƒĞ½ĞºÑ†Ğ¸Ñ	: stb_vorbis_plgSupportExt
 
-	Îïèñàíèå: Ïğîâåğÿåò ïîääåğæêó òèïà ôàéëà
+	ĞĞ¿Ğ¸ÑĞ°Ğ½Ğ¸Ğµ: ĞŸÑ€Ğ¾Ğ²ĞµÑ€ÑĞµÑ‚ Ğ¿Ğ¾Ğ´Ğ´ĞµÑ€Ğ¶ĞºÑƒ Ñ‚Ğ¸Ğ¿Ğ° Ñ„Ğ°Ğ¹Ğ»Ğ°
 
-	Èñòîğèÿ	: 18.08.22	Ñîçäàí
+	Ğ˜ÑÑ‚Ğ¾Ñ€Ğ¸Ñ	: 18.08.22	Ğ¡Ğ¾Ğ·Ğ´Ğ°Ğ½
 
 */
 bool N_APIENTRY libopenmpt_plgSupportExt(const wchar_t *fname, const wchar_t *fext)
 {
-	(void)fname; // Íåèñïîëüçóåìàÿ ïåğåìåííàÿ
+	(void)fname; // ĞĞµĞ¸ÑĞ¿Ğ¾Ğ»ÑŒĞ·ÑƒĞµĞ¼Ğ°Ñ Ğ¿ĞµÑ€ĞµĞ¼ĞµĞ½Ğ½Ğ°Ñ
 
 	if(_wcsicmp(fext,L"mod") == 0) return true;
 	if(_wcsicmp(fext,L"xm") == 0) return true;
@@ -112,11 +111,11 @@ static void libopenmpt_plgLogFunc(const char *message, void *data)
 }
 
 /*
-	Ôóíêöèÿ	: libopenmpt_plgLoad
+	Ğ¤ÑƒĞ½ĞºÑ†Ğ¸Ñ	: libopenmpt_plgLoad
 
-	Îïèñàíèå: Çàãğóæàåò òğåêåğíûé ìîäóëü
+	ĞĞ¿Ğ¸ÑĞ°Ğ½Ğ¸Ğµ: Ğ—Ğ°Ğ³Ñ€ÑƒĞ¶Ğ°ĞµÑ‚ Ñ‚Ñ€ĞµĞºĞµÑ€Ğ½Ñ‹Ğ¹ Ğ¼Ğ¾Ğ´ÑƒĞ»ÑŒ
 
-	Èñòîğèÿ	: 18.08.22	Ñîçäàí
+	Ğ˜ÑÑ‚Ğ¾Ñ€Ğ¸Ñ	: 18.08.22	Ğ¡Ğ¾Ğ·Ğ´Ğ°Ğ½
 
 */
 bool N_APIENTRY libopenmpt_plgLoad(const wchar_t *fname, na_audiofile_type *aud)
@@ -135,7 +134,7 @@ bool N_APIENTRY libopenmpt_plgLoad(const wchar_t *fname, na_audiofile_type *aud)
 		return false;
 	}
 	
-	length = ea->nFileLength(f);
+	length = (size_t)ea->nFileLength(f);
 	if(!length) {
 		ea->nlAddTab(-1); ea->nlPrint(L"%ls: %ls", L"libopenmpt_plgLoad()", L"false");
 		ea->nFileClose(f);
@@ -153,8 +152,8 @@ bool N_APIENTRY libopenmpt_plgLoad(const wchar_t *fname, na_audiofile_type *aud)
 	ea->nFileClose(f);
 	
 	module = openmpt_module_create_from_memory2(buf, length, libopenmpt_plgLogFunc, 0, 0, 0, 0, 0, 0);
+	ea->nFreeMemory(buf);
 	if(!module) {
-		ea->nFreeMemory(buf);
 		ea->nlAddTab(-1); ea->nlPrint(LOG_FDEBUGFORMAT, L"libopenmpt_plgLoad()", ERR_FILEISDAMAGED);
 		return false;
 	}
@@ -162,7 +161,6 @@ bool N_APIENTRY libopenmpt_plgLoad(const wchar_t *fname, na_audiofile_type *aud)
 	plgdata = ea->nAllocMemory(sizeof(libopenmpt_plgdata_type));
 	if(!plgdata) {
 		openmpt_module_destroy(module);
-		ea->nFreeMemory(buf);
 		ea->nlAddTab(-1); ea->nlPrint(L"%ls: %ls", L"libopenmpt_plgLoad()", L"false");
 		return false;
 	}
@@ -174,21 +172,19 @@ bool N_APIENTRY libopenmpt_plgLoad(const wchar_t *fname, na_audiofile_type *aud)
 		if(plgdata->lbuf) ea->nFreeMemory(plgdata->lbuf);
 		if(plgdata->rbuf) ea->nFreeMemory(plgdata->rbuf);
 		ea->nFreeMemory(plgdata);
-		ea->nFreeMemory(buf);
 		ea->nlAddTab(-1); ea->nlPrint(L"%ls: %ls", L"libopenmpt_plgLoad()", L"false");
 		return false;
 	}
 	
 	plgdata->module = module;
-	plgdata->buf = buf;
 	plgdata->samples_offset = 0;
 	aud->plgdata = plgdata;
 	
 	aud->sf = NA_SOUND_16BIT_STEREO;
-	aud->bps = 2; // áàéò â îäíîì ñåìïëå
-	aud->nos = 48000*openmpt_module_get_duration_seconds(module); // Êîëè÷åñòâî ñåìïëîâ
-	aud->noc = 2; // Êîë-âî êàíàëîâ
-	aud->freq = 48000; // ×àñòîòà
+	aud->bps = 2; // Ğ±Ğ°Ğ¹Ñ‚ Ğ² Ğ¾Ğ´Ğ½Ğ¾Ğ¼ ÑĞµĞ¼Ğ¿Ğ»Ğµ
+	aud->nos = (unsigned int)(48000*openmpt_module_get_duration_seconds(module)); // ĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ ÑĞµĞ¼Ğ¿Ğ»Ğ¾Ğ²
+	aud->noc = 2; // ĞšĞ¾Ğ»-Ğ²Ğ¾ ĞºĞ°Ğ½Ğ°Ğ»Ğ¾Ğ²
+	aud->freq = 48000; // Ğ§Ğ°ÑÑ‚Ğ¾Ñ‚Ğ°
 	
 	ea->nlAddTab(-1); ea->nlPrint(LOG_FDEBUGFORMAT, L"stb_vorbis_plgLoad()", N_OK);
 
@@ -196,14 +192,14 @@ bool N_APIENTRY libopenmpt_plgLoad(const wchar_t *fname, na_audiofile_type *aud)
 }
 
 /*
-	Ôóíêöèÿ	: libopenmpt_plgRead
+	Ğ¤ÑƒĞ½ĞºÑ†Ğ¸Ñ	: libopenmpt_plgRead
 
-	Îïèñàíèå: ×èòàåò òğåêåğíûé ìîäóëü
-			offset - óêàçûâàåò êîëè÷åñòâî ñåêóíä, êîòîğûå íàäî ïğîïóñòèòü îò íà÷àëà çàïèñè
-			nofs - Êîëè÷åñòâî ñåìïëîâ, êîòîğûå íàäî ïğî÷èòàòü
-			aud - Ñòğóêòóğà, ñîäåğæàùàÿ äàííûå îá àóäèîôàéëå
-			Âñå òğè çíà÷åíèÿ __âñåãäà__ ïğàâèëüíûå, ò.å. ïğîâåğêà íå òğåáóåòñÿ
-	Èñòîğèÿ	: 18.08.22	Ñîçäàí
+	ĞĞ¿Ğ¸ÑĞ°Ğ½Ğ¸Ğµ: Ğ§Ğ¸Ñ‚Ğ°ĞµÑ‚ Ñ‚Ñ€ĞµĞºĞµÑ€Ğ½Ñ‹Ğ¹ Ğ¼Ğ¾Ğ´ÑƒĞ»ÑŒ
+			offset - ÑƒĞºĞ°Ğ·Ñ‹Ğ²Ğ°ĞµÑ‚ ĞºĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ ÑĞµĞºÑƒĞ½Ğ´, ĞºĞ¾Ñ‚Ğ¾Ñ€Ñ‹Ğµ Ğ½Ğ°Ğ´Ğ¾ Ğ¿Ñ€Ğ¾Ğ¿ÑƒÑÑ‚Ğ¸Ñ‚ÑŒ Ğ¾Ñ‚ Ğ½Ğ°Ñ‡Ğ°Ğ»Ğ° Ğ·Ğ°Ğ¿Ğ¸ÑĞ¸
+			nofs - ĞšĞ¾Ğ»Ğ¸Ñ‡ĞµÑÑ‚Ğ²Ğ¾ ÑĞµĞ¼Ğ¿Ğ»Ğ¾Ğ², ĞºĞ¾Ñ‚Ğ¾Ñ€Ñ‹Ğµ Ğ½Ğ°Ğ´Ğ¾ Ğ¿Ñ€Ğ¾Ñ‡Ğ¸Ñ‚Ğ°Ñ‚ÑŒ
+			aud - Ğ¡Ñ‚Ñ€ÑƒĞºÑ‚ÑƒÑ€Ğ°, ÑĞ¾Ğ´ĞµÑ€Ğ¶Ğ°Ñ‰Ğ°Ñ Ğ´Ğ°Ğ½Ğ½Ñ‹Ğµ Ğ¾Ğ± Ğ°ÑƒĞ´Ğ¸Ğ¾Ñ„Ğ°Ğ¹Ğ»Ğµ
+			Ğ’ÑĞµ Ñ‚Ñ€Ğ¸ Ğ·Ğ½Ğ°Ñ‡ĞµĞ½Ğ¸Ñ __Ğ²ÑĞµĞ³Ğ´Ğ°__ Ğ¿Ñ€Ğ°Ğ²Ğ¸Ğ»ÑŒĞ½Ñ‹Ğµ, Ñ‚.Ğµ. Ğ¿Ñ€Ğ¾Ğ²ĞµÑ€ĞºĞ° Ğ½Ğµ Ñ‚Ñ€ĞµĞ±ÑƒĞµÑ‚ÑÑ
+	Ğ˜ÑÑ‚Ğ¾Ñ€Ğ¸Ñ	: 18.08.22	Ğ¡Ğ¾Ğ·Ğ´Ğ°Ğ½
 
 */
 bool N_APIENTRY libopenmpt_plgRead(unsigned int offset, unsigned int nofs, void *buf, na_audiofile_type *aud)
@@ -245,16 +241,17 @@ bool N_APIENTRY libopenmpt_plgRead(unsigned int offset, unsigned int nofs, void 
 }
 
 /*
-	Ôóíêöèÿ	: libopenmpt_plgUnload
+	Ğ¤ÑƒĞ½ĞºÑ†Ğ¸Ñ	: libopenmpt_plgUnload
 
-	Îïèñàíèå: Âûãğóæàåò òğåêåğíûé ìîäóëü
+	ĞĞ¿Ğ¸ÑĞ°Ğ½Ğ¸Ğµ: Ğ’Ñ‹Ğ³Ñ€ÑƒĞ¶Ğ°ĞµÑ‚ Ñ‚Ñ€ĞµĞºĞµÑ€Ğ½Ñ‹Ğ¹ Ğ¼Ğ¾Ğ´ÑƒĞ»ÑŒ
 
-	Èñòîğèÿ	: 18.08.22	Ñîçäàí
+	Ğ˜ÑÑ‚Ğ¾Ñ€Ğ¸Ñ	: 18.08.22	Ğ¡Ğ¾Ğ·Ğ´Ğ°Ğ½
 
 */
 void N_APIENTRY libopenmpt_plgUnload(na_audiofile_type *aud)
 {
 	openmpt_module_destroy(((libopenmpt_plgdata_type *)aud->plgdata)->module);
-	ea->nFreeMemory(((libopenmpt_plgdata_type *)aud->plgdata)->buf);
+	ea->nFreeMemory(((libopenmpt_plgdata_type*)aud->plgdata)->lbuf);
+	ea->nFreeMemory(((libopenmpt_plgdata_type*)aud->plgdata)->rbuf);
 	ea->nFreeMemory(aud->plgdata);
 }
