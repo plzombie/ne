@@ -1,0 +1,1 @@
+openmpt-mpg123 was deleted because I don't want GNU LGPL stuff to be in my repository. Should work without it.

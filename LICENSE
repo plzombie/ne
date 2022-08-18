@@ -207,6 +207,13 @@ For files in forks/gl
 ** MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
 */
 
++++++++++++++++++++++++++++++++++++++++++++++++++++
+For files in forks/libopenmpt and libopenmpt dll's
+---------------------------------------------------
+See "forks\libopenmpt\Licenses\" folder.
+Also need to include "forks\libopenmpt\lgpl_crap\mpg123.7z"
+to your distribution if you use this plugin.
+
 +++++++++++++++++++
 For media/test.txt
 -------------------

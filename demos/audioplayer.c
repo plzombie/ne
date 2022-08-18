@@ -47,6 +47,7 @@ int wmain(int argc, wchar_t **argv)
 
 	nAddPlugin(L"plgwavpack");
 	nAddPlugin(L"plgstb_vorbis");
+	nAddPlugin(L"plglibopenmpt");
 
 	if(!nInit())
 		return 3;
