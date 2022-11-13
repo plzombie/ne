@@ -33,8 +33,11 @@
     <ClCompile Include="..\..\forks\imgui\imgui_draw.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\forks\imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\forks\imgui\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

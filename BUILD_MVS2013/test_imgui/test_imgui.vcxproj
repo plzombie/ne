@@ -216,6 +216,7 @@
     <ClCompile Include="..\..\forks\imgui\imgui.cpp" />
     <ClCompile Include="..\..\forks\imgui\imgui_demo.cpp" />
     <ClCompile Include="..\..\forks\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\..\forks\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\..\forks\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\..\nyan_imgui\imgui_impl_ne.cpp" />
     <ClCompile Include="..\..\tests\test_imgui.cpp" />

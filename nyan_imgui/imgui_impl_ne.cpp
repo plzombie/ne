@@ -115,7 +115,7 @@ bool ImGui_ImplNyan_Init(const wchar_t *font_name, float font_size, bool support
 
 void ImGui_ImplNyan_NewFrame(void)
 {
-	unsigned int winx, winy, prev_wc = 0;
+	unsigned int winx, winy;
 	int mx, my, mbl, mbr, mbm;
 	ImGuiIO &io = ImGui::GetIO();
 	const wchar_t *inputstr;
@@ -154,11 +154,7 @@ void ImGui_ImplNyan_NewFrame(void)
 #ifdef N_WCHAR32
 		io.AddInputCharacter(wc);
 #else
-		if(wc < 0xD800 || wc >= 0xDFFF)
-			io.AddInputCharacter(wc);
-		else if(wc < 0xDC00) // TODO: Test this
-			prev_wc = 0x10000 + ((unsigned int)(wc - 0xD800) << 10);
-		else io.AddInputCharacter(prev_wc + wc - 0xDC00);
+		io.AddInputCharacterUTF16(wc);
 #endif
 			
 

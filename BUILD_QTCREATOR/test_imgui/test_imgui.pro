@@ -32,7 +32,8 @@ SOURCES += \
     ../../forks/imgui/imgui.cpp \
     ../../forks/imgui/imgui_demo.cpp \
     ../../forks/imgui/imgui_draw.cpp \
-    ../../forks/imgui/imgui_widgets.cpp
+    ../../forks/imgui/imgui_widgets.cpp \
+    ../../forks/imgui/imgui_tables.cpp
 
 unix {
     DEFINES += N_POSIX N_WCHAR32 N_STATIC
