@@ -232,9 +232,8 @@ static void ImGui_ImplNyan_RenderDrawLists(ImDrawData *draw_data)
 				pcmd->UserCallback(cmd_list, pcmd);
 			else {
 				nvSetClippingRegion((int)(pcmd->ClipRect.x), (int)(pcmd->ClipRect.y), (int)(pcmd->ClipRect.z), (int)(pcmd->ClipRect.w));
-				nvDraw2d(NV_DRAWTRIANGLE, pcmd->ElemCount/3, (unsigned int)(intptr_t)pcmd->TextureId, varray);
+				nvDraw2d(NV_DRAWTRIANGLE, pcmd->ElemCount/3, (unsigned int)(intptr_t)(pcmd->GetTexID()), varray+pcmd->IdxOffset);
 			}
-			varray += pcmd->ElemCount;
 		}
 	}
 
