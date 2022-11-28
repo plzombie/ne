@@ -13,6 +13,8 @@
 #include <stdbool.h>
 #include <time.h>
 
+#define GL_GLEXT_LEGACY
+
 #ifdef N_WINDOWS
 	#include <windows.h>
 #endif

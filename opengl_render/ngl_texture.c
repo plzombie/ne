@@ -14,6 +14,8 @@
 #include <math.h>
 #include <time.h> // Temp
 
+#define GL_GLEXT_LEGACY
+
 #ifdef N_WINDOWS
 	#include <windows.h>
 #endif

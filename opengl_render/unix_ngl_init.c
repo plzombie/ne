@@ -18,6 +18,9 @@
 #include <time.h>
 #include <signal.h>
 
+#define GL_GLEXT_LEGACY
+#define GLX_GLXEXT_LEGACY
+
 #include <GL/glx.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
