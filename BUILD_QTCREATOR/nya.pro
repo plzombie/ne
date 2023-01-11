@@ -8,9 +8,10 @@ SUBDIRS = \
     plgkplib_files \
     plgkplib_pictures \
     plgrix \
+    plgqoi \
     plgstb_image \
     plgstb_vorbis \
-    plgwavpack \
+    plgwavpack
 
 SUBDIRS += nya
 

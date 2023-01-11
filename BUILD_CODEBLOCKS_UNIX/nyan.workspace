@@ -74,6 +74,7 @@
 		</Project>
 		<Project filename="plgwavpack/plgwavpack.cbp" />
 		<Project filename="plgrix/plgrix.cbp" />
+		<Project filename="plgqoi/plgqoi.cbp" />
 		<Project filename="plgkplib_pictures/plgkplib_pictures.cbp" />
 		<Project filename="plgkplib_files/plgkplib_files.cbp" />
 		<Project filename="plgstb_image/plgstb_image.cbp" />

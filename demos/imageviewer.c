@@ -75,6 +75,11 @@ int wmain(int argc, wchar_t **argv)
 	
 	if(!nInit()) return 0;
 	
+	// Add plugins after init to not interact with standard plugins
+	nAddPlugin(L"plgrix");
+	nAddPlugin(L"plgqoi");
+	nAddPlugin(L"plgstb_image");
+	
 	image.mutex = nCreateMutex();
 	if(!image.mutex) {
 		nClose();
