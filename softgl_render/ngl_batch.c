@@ -107,6 +107,9 @@ N_API bool N_APIENTRY_EXPORT nglBatch2dAdd(int batch2d_type, unsigned int batch_
 */
 N_API bool N_APIENTRY_EXPORT nglBatch3dDrawMesh(unsigned int batch_currenttex, unsigned int vertices, nv_3dvertex_type *varray)
 {
+	(void)batch_currenttex;
+	(void)varray;
+
 	if(ngl_batch_state != NGL_BATCH_STATE_3D || !ngl_isinit || vertices == 0) return false;
 	
 	// Вывод 3d модели -^_^-
@@ -184,6 +187,8 @@ N_API void N_APIENTRY_EXPORT nglBatch2dEnd(void)
 */
 N_API bool N_APIENTRY_EXPORT nglBatch3dSetModelviewMatrix(double *matrix)
 {
+	(void)matrix;
+	
 	if(!ngl_isinit) return false;
 	if(ngl_batch_state == NGL_BATCH_STATE_NO) return false;
 

@@ -96,10 +96,12 @@ N_API bool N_APIENTRY_EXPORT nglFreeAllTextures(void)
 
 */
 N_API unsigned int N_APIENTRY_EXPORT nglLoadTexture(unsigned int flags, unsigned int sizex, unsigned int sizey, unsigned int nglcolorformat, int nglrowalignment, unsigned char *buffer)
-{
+{	
 	bool success = false;
 	unsigned int curtex = 0;
-	
+
+	(void)flags;
+		
 	if(!ngl_isinit) return 0;
 	
 	if(ngl_batch_state != NGL_BATCH_STATE_NO) return 0;
@@ -126,6 +128,9 @@ N_API unsigned int N_APIENTRY_EXPORT nglLoadTexture(unsigned int flags, unsigned
 N_API bool N_APIENTRY_EXPORT nglUpdateTexture(unsigned int texid, unsigned char *buffer)
 {
 	bool success = true;
+	
+	(void)texid;
+	(void)buffer;
 	
 	if(!ngl_isinit) return false;
 	
