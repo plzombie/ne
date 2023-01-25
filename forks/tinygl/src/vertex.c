@@ -348,6 +348,8 @@ void glopVertex(GLContext * c, GLParam * p)
 
 void glopEnd(GLContext * c, GLParam * param)
 {
+    (void)param;
+
     assert(c->in_begin == 1);
 
     if (c->begin_type == GL_LINE_LOOP) {

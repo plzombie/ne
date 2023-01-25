@@ -136,6 +136,9 @@ void glopHint(GLContext *c,GLParam *p)
   int mode=p[2].i;
 
   /* do nothing */
+#else
+  (void)c;
+  (void)p;
 #endif
 }
 

@@ -56,6 +56,7 @@ void glopLoadMatrix(GLContext *c,GLParam *p)
 
 void glopLoadIdentity(GLContext *c,GLParam *p)
 {
+  (void)p;
 
   gl_M4_Id(c->matrix_stack_ptr[c->matrix_mode]);
 
@@ -89,6 +90,8 @@ void glopPushMatrix(GLContext *c,GLParam *p)
   int n=c->matrix_mode;
   M4 *m;
 
+  (void)p;
+
   assert( (c->matrix_stack_ptr[n] - c->matrix_stack[n] + 1 )
 	   < c->matrix_stack_depth_max[n] );
 
@@ -102,6 +105,8 @@ void glopPushMatrix(GLContext *c,GLParam *p)
 void glopPopMatrix(GLContext *c,GLParam *p)
 {
   int n=c->matrix_mode;
+  
+  (void)p;
 
   assert( c->matrix_stack_ptr[n] > c->matrix_stack[n] );
   c->matrix_stack_ptr[n]--;

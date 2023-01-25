@@ -23,6 +23,8 @@ tgl_warning(const char *format, ...)
   fprintf(stderr, "*WARNING* ");
   vfprintf(stderr, format, args);
   va_end(args);
+#else
+  (void)format;
 #endif /* !NO_DEBUG_OUTPUT */
 }
 
@@ -36,6 +38,8 @@ tgl_trace(const char *format, ...)
   fprintf(stderr, "*DEBUG* ");
   vfprintf(stderr, format, args);
   va_end(args);
+#else
+  (void)format;
 #endif /* !NO_DEBUG_OUTPUT */
 }
 
@@ -51,5 +55,7 @@ tgl_fixme(const char *format, ...)
   fprintf(stderr, "*FIXME* ");
   vfprintf(stderr, format, args);
   va_end(args);
+#else
+  (void)format;
 #endif /* !NO_DEBUG_OUTPUT */
 }

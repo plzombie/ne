@@ -152,12 +152,18 @@ void gl_add_op(GLParam *p)
 /* this opcode is never called directly */
 void glopEndList(GLContext *c,GLParam *p)
 {
+  (void)c;
+  (void)p;
+  
   assert(0);
 }
 
 /* this opcode is never called directly */
 void glopNextBuffer(GLContext *c,GLParam *p)
 {
+  (void)c;
+  (void)p;
+  
   assert(0);
 }
 

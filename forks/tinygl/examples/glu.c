@@ -74,6 +74,8 @@ GLUquadricObj *gluNewQuadric(void)
 
 void gluQuadricDrawStyle(GLUquadricObj *obj, int style)
 {
+   (void)obj;
+   (void)style;
 }
 
 void gluCylinder( GLUquadricObj *qobj,
@@ -86,6 +88,8 @@ void gluCylinder( GLUquadricObj *qobj,
    GLfloat du = 1.0f / slices;
    GLfloat dv = 1.0f / stacks;
    GLfloat tcx = 0.0, tcy = 0.0;
+   
+   (void)qobj;
    
    nsign = 1.0;
 
@@ -141,6 +145,8 @@ void gluDisk( GLUquadricObj *qobj,
    GLint s, l;
    GLfloat sa,ca;
 
+   (void)qobj;
+
    /* Normal vectors */
 	 glNormal3f( 0.0, 0.0, +1.0 );
 
@@ -183,6 +189,8 @@ void gluSphere(GLUquadricObj *qobj,
    int i, j, imin, imax;
    int normals;
    float nsign;
+   
+   (void)qobj;
   
    normals=1;
    nsign=1;
