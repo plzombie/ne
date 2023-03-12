@@ -357,11 +357,17 @@ N_API bool N_APIENTRY_EXPORT naReadAudioFile(unsigned int offset, unsigned int n
 
 	NLOCKAFMUTEX
 
-	if(aud->selplg >= na_audiofile_maxplugins)
+	if(aud->selplg >= na_audiofile_maxplugins) {
+		NUNLOCKAFMUTEX
+		
 		return false;
+	}
 
-	if(aud->selplgusecounter != na_audiofile_plugins[aud->selplg].usecounter)
+	if(aud->selplgusecounter != na_audiofile_plugins[aud->selplg].usecounter) {
+		NUNLOCKAFMUTEX
+		
 		return false;
+	}
 
 	success = na_audiofile_plugins[aud->selplg].plugin.Read(offset, nofs, buf, aud);
 
@@ -438,8 +444,8 @@ N_API bool N_APIENTRY_EXPORT naAddAudioFilePlugin(const wchar_t *name, na_audiof
 
 	NLOCKAFMUTEX
 
-	if(
-		!nArrayAdd(&n_ea, (void **)(&na_audiofile_plugins),
+	if(!nArrayAdd(
+		&n_ea, (void **)(&na_audiofile_plugins),
 		&na_audiofile_maxplugins,
 		&na_audiofile_allocplugins,
 		naCheckAudioPluginArray,
