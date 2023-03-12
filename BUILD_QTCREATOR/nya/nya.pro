@@ -37,6 +37,7 @@ CONFIG(debug, debug|release) {
 }
 
 SOURCES += \
+    ../../commonsrc/core/nyan_array.c \
     ../../nyan/nyan.c \
     ../../nyan/nyan_apifordlls.c \
     ../../nyan/nyan_au_init.c \
@@ -73,6 +74,7 @@ SOURCES += \
     ../../nyan_container/nyan_container_ne_helpers.c
 
 HEADERS += \
+    ../../commonsrc/core/nyan_array.h \
     ../../nyan/nyan_apifordlls.h \
     ../../nyan/nyan_au_init.h \
     ../../nyan/nyan_au_main.h \

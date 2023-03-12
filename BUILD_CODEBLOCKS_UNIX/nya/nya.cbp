@@ -49,6 +49,9 @@
 			<Add library="m" />
 			<Add directory="/usr/local/lib/" />
 		</Linker>
+		<Unit filename="../../commonsrc/core/nyan_array.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="../../extclib/mbstowcsl.c">
 			<Option compilerVar="CC" />
 		</Unit>

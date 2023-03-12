@@ -123,6 +123,9 @@
     <ClCompile Include="..\..\nyan_container\nyan_container_strings.c">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\commonsrc\core\nyan_array.c">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\plugins\plg_bmp.h">

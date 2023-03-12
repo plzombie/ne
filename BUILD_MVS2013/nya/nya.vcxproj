@@ -227,6 +227,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\commonsrc\core\nyan_array.c" />
     <ClCompile Include="..\..\extclib\mbstowcsl.c" />
     <ClCompile Include="..\..\extclib\strlcpy.c" />
     <ClCompile Include="..\..\nyan\nyan.c" />
