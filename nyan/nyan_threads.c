@@ -17,11 +17,15 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
+#include <limits.h>
 #define STACK_SIZE    8192
 
 #define N_THREADLIB_WASTINGTIME 20
 
 #include "nyan_decls_publicapi.h"
+
+#include "../commonsrc/core/nyan_array.h"
+#include "nyan_apifordlls.h"
 
 #include "nyan_text.h"
 #include "nyan_threads.h"
@@ -84,6 +88,7 @@ typedef struct {
 
 static n_task_type *n_tasks = 0;
 static unsigned int n_maxtasks = 0;
+static unsigned int n_alloctasks = 0;
 
 static unsigned int n_nofrealthreads = 0; // Количество реальных потоков, которые были созданы в системе
 
@@ -125,6 +130,7 @@ bool nInitThreadsLib(void)
 
 	n_nofrealthreads = 0;
 	n_maxtasks = 0;
+	n_alloctasks = 0;
 #if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
 	if(thrd_create(&n_thlib_localthread, nThreadsLib_threadproc, NULL) == thrd_success)
 		n_nofrealthreads = 1;
@@ -159,7 +165,7 @@ bool nDestroyThreadsLib(void)
 
 	nLockSystemMutex(&n_thlib_localmutex);
 
-	if(n_maxtasks) {
+	if(n_alloctasks) {
 		unsigned int i;
 
 		for(i = 0; i < n_maxtasks; i++)
@@ -168,6 +174,7 @@ bool nDestroyThreadsLib(void)
 
 		nFreeMemory(n_tasks);
 		n_tasks = 0;
+		n_alloctasks = 0;
 		n_maxtasks = 0;
 	}
 
@@ -306,36 +313,22 @@ void *nThreadsLib_threadproc(void *args)
 #endif
 
 /*
-	Функция	: nAllocMemoryForTasks
+	Функция	: naCheckTaskArray
 
-	Описание: Выделяет память под новые задачи
+	Описание: Проверяет свободное место для задачи в массиве
 
-	История	: 07.12.17	Создан
+	История	: 12.03.23	Создан
 
 */
-static bool nAllocMemoryForTasks(void)
+static bool naCheckTaskArray(void *array_el, bool set_free)
 {
-	unsigned int i, tasks_added;
-
-	n_task_type *_n_tasks;
-
-	// Добавляем определённое количество задач. Но не меньше, чем количество потоков.
-	tasks_added = 32;
-	if(tasks_added < n_nofrealthreads)
-		tasks_added = n_nofrealthreads;
-	_n_tasks = nReallocMemory(n_tasks, (n_maxtasks+tasks_added)*sizeof(n_task_type));
-
-	if(_n_tasks)
-		n_tasks = _n_tasks;
-	else
-		return false;
-
-	for(i=n_maxtasks;i<n_maxtasks+32;i++)
-		n_tasks[i].used = false;
-
-	n_maxtasks += tasks_added;
-
-	return true;
+	n_task_type *el;
+	
+	el = (n_task_type *)array_el;
+	
+	if(set_free) el->used = false;
+	
+	return (el->used == false)?true:false;
 }
 
 /*
@@ -348,7 +341,7 @@ static bool nAllocMemoryForTasks(void)
 */
 N_API unsigned int N_APIENTRY_EXPORT nCreateTask(void N_APIENTRY func(void *param), void *args, unsigned int waitingtime, int noffunccalls)
 {
-	unsigned int i;
+	unsigned int i = 0;
 
 	if(!n_taskslib_isinit) return 0;
 
@@ -357,16 +350,18 @@ N_API unsigned int N_APIENTRY_EXPORT nCreateTask(void N_APIENTRY func(void *para
 	nLockSystemMutex(&n_thlib_localmutex);
 
 	// Выделение памяти под потоки
-	for(i = 0; i < n_maxtasks; i++)
-		if(!n_tasks[i].used)
-			break;
-
-	if(i == n_maxtasks) {
-		if(!nAllocMemoryForTasks()) {
-			nUnlockSystemMutex(&n_thlib_localmutex);
-			nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NCREATETASK, N_FALSE, N_ID, 0);
-			return 0;
-		}
+	if(!nArrayAdd(
+		&n_ea, (void **)(&n_tasks),
+		&n_maxtasks,
+		&n_alloctasks,
+		naCheckTaskArray,
+		&i,
+		(n_nofrealthreads < 32)?32:n_nofrealthreads,
+		sizeof(n_task_type))
+	) {
+		nUnlockSystemMutex(&n_thlib_localmutex);
+		nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NCREATETASK, N_FALSE, N_ID, 0);
+		return 0;
 	}
 
 	n_tasks[i].func = func;
@@ -439,22 +434,35 @@ N_API bool N_APIENTRY_EXPORT nRunTaskOnAllThreads(void N_APIENTRY func(void *par
 	// Поиск неиспользуемых задач
 	// В текущей реализации, поток номер m обрабатывает задачи n_nofrealthreads*i+m, где i = 1,2,3....
 	// Так что надо найти n_nofrealthreads свободных задач подряд
-	for(i = 0; i < n_maxtasks; i++) {
-		for(j = 0; j < n_nofrealthreads; j++)
-			if(n_tasks[i+j].used)
-				break;
+	if(n_alloctasks) {
+		for(i = 0; i <= n_alloctasks-n_nofrealthreads; i++) {
+			for(j = 0; j < n_nofrealthreads; j++)
+				if(n_tasks[i+j].used)
+					break;
 
-		if(j == n_nofrealthreads)
-			break;
+			if(j == n_nofrealthreads)
+				break;
+		}
 	}
 
 	// Поиск закончился неудачно. Выделяем память под новые задачи.
-	if(i == n_maxtasks) {
-		if(!nAllocMemoryForTasks()) {
+	if(i == n_alloctasks-n_nofrealthreads+1) {
+		n_task_type *_n_tasks = 0;
+		
+		if(UINT_MAX-n_nofrealthreads >= n_alloctasks)
+			_n_tasks = nReallocMemory(n_tasks, (n_alloctasks+n_nofrealthreads)*sizeof(n_task_type));
+		
+		if(_n_tasks) {
+			i = n_alloctasks;
+			n_alloctasks += n_nofrealthreads;
+			n_maxtasks = n_alloctasks;
+			n_tasks = _n_tasks;
+		} else {
 			nUnlockSystemMutex(&n_thlib_localmutex);
 			return false;
 		}
-	}
+	} else if(i+n_nofrealthreads > n_maxtasks) // Поиск закончился удачно. Проверяем, не нужно ли нам сдвинуть максимальное количество задач
+		n_maxtasks = i+n_nofrealthreads;
 
 	// Установка задач.
 	for(j = 0; j < n_nofrealthreads; j++) {

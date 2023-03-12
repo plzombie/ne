@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../commonsrc/core/nyan_array.h"
+
 #include "nyan_au_init_publicapi.h"
 #include "nyan_filesys_publicapi.h"
 #include "nyan_log_publicapi.h"
@@ -42,9 +44,11 @@ N_API bool N_APIENTRY_EXPORT nAddPlugin(const wchar_t *dllname)
 	n_plg_setupdll_type plgSetupDll;
 	n_plg_getapi_type plgGetApi;
 	plg_api_type *plg_api;
+	unsigned int new_plugin = 0;
 
 	nlPrint(LOG_FDEBUGFORMAT7,F_NADDPLUGIN,N_FNAME,dllname); nlAddTab(1);
 
+#if 0
 	if(!allocdllhandles) {
 		dllhandles = nAllocMemory(1024*sizeof(void *));
 
@@ -63,17 +67,28 @@ N_API bool N_APIENTRY_EXPORT nAddPlugin(const wchar_t *dllname)
 		} else
 			success = false;
 	}
+#else
+	if(!nArrayAdd(
+		&n_ea, (void **)(&dllhandles),
+		&maxdllhandles,
+		&allocdllhandles,
+		naCheckArrayAlwaysFalse,
+		&new_plugin,
+		NYAN_ARRAY_DEFAULT_STEP,
+		sizeof(void *))
+	) success = false;
+#endif
 
 	if(success) {
-		dllhandles[maxdllhandles] = nLoadModule(dllname);
+		dllhandles[new_plugin] = nLoadModule(dllname);
 
-		if(!dllhandles[maxdllhandles]) success = false;
+		if(!dllhandles[new_plugin]) success = false;
 	}
 
 	// Получаем указатели на функции, описывающие плагин
 	if(success) {
-		plgSetupDll = (n_plg_setupdll_type)nGetProcAddress(dllhandles[maxdllhandles], "plgSetupDll", "_plgSetupDll");
-		plgGetApi = (n_plg_getapi_type)nGetProcAddress(dllhandles[maxdllhandles], "plgGetApi", "_plgGetApi");
+		plgSetupDll = (n_plg_setupdll_type)nGetProcAddress(dllhandles[new_plugin], "plgSetupDll", "_plgSetupDll");
+		plgGetApi = (n_plg_getapi_type)nGetProcAddress(dllhandles[new_plugin], "plgGetApi", "_plgGetApi");
 		if(!plgSetupDll || !plgGetApi) success = false;
 	}
 
@@ -128,11 +143,9 @@ N_API bool N_APIENTRY_EXPORT nAddPlugin(const wchar_t *dllname)
 				success = false;
 		}
 
-		// Если загружен успешно, то увеличиваем счётчик на 1
-		if(success)
-			maxdllhandles++;
-		else // Если нет, то закрываем dll
-			nFreeLib(dllhandles[maxdllhandles]);
+		// Если не загружено, то закрываем dll
+		if(!success)
+			nFreeLib(dllhandles[new_plugin]);
 	}
 
 	nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NADDPLUGIN, N_OK, N_SUCCESS, success);

@@ -746,30 +746,6 @@ N_API bool N_APIENTRY_EXPORT nAddFilePlugin(const wchar_t *name, fs_fileplg_type
 
 	NLOCKFSMUTEX
 
-#if 0
-	if(!fs_allocfileplgs) {
-		fs_fileplgs = nAllocMemory(1024*sizeof(fs_fileplg_type));
-		if(!fs_fileplgs) {
-			NUNLOCKFSMUTEX
-			nlPrint(LOG_FDEBUGFORMAT, F_NADDFILEPLUGIN, N_FALSE);
-
-			return false;
-		}
-		fs_allocfileplgs = 1024;
-	} else if(fs_maxfileplgs == fs_allocfileplgs) {
-		fs_fileplg_type *_fs_fileplgs;
-		_fs_fileplgs = nReallocMemory(fs_fileplgs, (fs_allocfileplgs+1024)*sizeof(fs_fileplg_type));
-		if(_fs_fileplgs)
-			fs_fileplgs = _fs_fileplgs;
-		else {
-			NUNLOCKFSMUTEX
-			nlPrint(LOG_FDEBUGFORMAT, F_NADDFILEPLUGIN, N_FALSE);
-
-			return false;
-		}
-		fs_allocfileplgs += 1024;
-	}
-#else
 	if(
 		!nArrayAdd(&n_ea, (void **)(&fs_fileplgs),
 		&fs_maxfileplgs,
@@ -779,7 +755,6 @@ N_API bool N_APIENTRY_EXPORT nAddFilePlugin(const wchar_t *name, fs_fileplg_type
 		NYAN_ARRAY_DEFAULT_STEP,
 		sizeof(fs_fileplg_type))
 	) goto NADDFILEPLUGIN_ERROR;
-#endif
 
 	fs_fileplgs[new_plugin] = *fs_fileplg;
 
