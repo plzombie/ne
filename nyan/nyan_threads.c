@@ -446,7 +446,7 @@ N_API bool N_APIENTRY_EXPORT nRunTaskOnAllThreads(void N_APIENTRY func(void *par
 	}
 
 	// Поиск закончился неудачно. Выделяем память под новые задачи.
-	if(i == n_alloctasks-n_nofrealthreads+1) {
+	if(!n_alloctasks || (i == n_alloctasks-n_nofrealthreads+1)) {
 		n_task_type *_n_tasks = 0;
 		
 		if(UINT_MAX-n_nofrealthreads >= n_alloctasks)

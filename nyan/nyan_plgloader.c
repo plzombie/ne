@@ -48,26 +48,6 @@ N_API bool N_APIENTRY_EXPORT nAddPlugin(const wchar_t *dllname)
 
 	nlPrint(LOG_FDEBUGFORMAT7,F_NADDPLUGIN,N_FNAME,dllname); nlAddTab(1);
 
-#if 0
-	if(!allocdllhandles) {
-		dllhandles = nAllocMemory(1024*sizeof(void *));
-
-		if(dllhandles)
-			allocdllhandles = 1024;
-		else
-			success = false;
-	} else if(maxdllhandles == allocdllhandles) {
-		void **_dllhandles;
-
-		_dllhandles = nReallocMemory(dllhandles, (allocdllhandles+1024)*sizeof(void *));
-
-		if(_dllhandles) {
-			dllhandles = _dllhandles;
-			allocdllhandles += 1024;
-		} else
-			success = false;
-	}
-#else
 	if(!nArrayAdd(
 		&n_ea, (void **)(&dllhandles),
 		&maxdllhandles,
@@ -77,7 +57,6 @@ N_API bool N_APIENTRY_EXPORT nAddPlugin(const wchar_t *dllname)
 		NYAN_ARRAY_DEFAULT_STEP,
 		sizeof(void *))
 	) success = false;
-#endif
 
 	if(success) {
 		dllhandles[new_plugin] = nLoadModule(dllname);
