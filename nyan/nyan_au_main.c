@@ -10,11 +10,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../commonsrc/core/nyan_array.h"
+
 #include "nyan_au_init_publicapi.h"
 #include "nyan_au_main_publicapi.h"
 #include "nyan_log_publicapi.h"
 #include "nyan_mem_publicapi.h"
 #include "nyan_text.h"
+
+#include "nyan_apifordlls.h"
 
 #include "nyan_nalapi.h"
 
@@ -22,11 +26,31 @@
 #include "nyan_au_main.h"
 
 na_buffer_type *na_buffers = 0;
+unsigned int na_allocbuffers = 0;
 unsigned int na_maxbuffers = 0;
 
 na_audiostream_type *na_audiostreams = 0;
+unsigned int na_allocaudiostreams = 0;
 unsigned int na_maxaudiostreams = 0;
 
+/*
+	Функция	: naCheckBufferArray
+
+	Описание: Проверяет свободное место для аудиобуффера в массиве
+
+	История	: 12.03.23	Создан
+
+*/
+static bool naCheckBufferArray(void *array_el, bool set_free)
+{
+	na_buffer_type *el;
+	
+	el = (na_buffer_type *)array_el;
+	
+	if(set_free) el->status = NA_BUFFER_STATUS_FREE;
+	
+	return (el->status == NA_BUFFER_STATUS_FREE)?true:false;
+}
 
 /*
 	Функция	: naCreateBuffer
@@ -38,29 +62,23 @@ unsigned int na_maxaudiostreams = 0;
 */
 N_API unsigned int N_APIENTRY_EXPORT naCreateBuffer(const wchar_t *fname)
 {
-	unsigned int i;
+	unsigned int i = 0;
 
 	if(!na_isinit) return 0;
 
 	nlPrint(LOG_FDEBUGFORMAT6, F_NACREATEBUFFER, N_FNAME, fname); nlAddTab(1);
 
-	for(i = 0;i < na_maxbuffers;i++)
-		if(na_buffers[i].status == NA_BUFFER_STATUS_FREE)
-			break;
-
-	if(i == na_maxbuffers) {
-		na_buffer_type *_na_buffers;
-		_na_buffers = nReallocMemory(na_buffers, (na_maxbuffers+1024)*sizeof(na_buffer_type));
-		if(_na_buffers)
-			na_buffers = _na_buffers;
-		else {
-			nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NACREATEBUFFER, N_FALSE, N_ID, 0);
-			return false;
-		}
-		for(i=na_maxbuffers;i<na_maxbuffers+1024;i++)
-			na_buffers[i].status = NA_BUFFER_STATUS_FREE;
-		i = na_maxbuffers;
-		na_maxbuffers += 1024;
+	if(
+		!nArrayAdd(&n_ea, (void **)(&na_buffers),
+		&na_maxbuffers,
+		&na_allocbuffers,
+		naCheckBufferArray,
+		&i,
+		NYAN_ARRAY_DEFAULT_STEP,
+		sizeof(na_buffer_type))
+	) {
+		nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NACREATEBUFFER, N_FALSE, N_ID, 0);
+		return false;
 	}
 
 	na_buffers[i].fname = nAllocMemory((wcslen(fname)+1)*sizeof(wchar_t));
@@ -100,7 +118,7 @@ N_API bool N_APIENTRY_EXPORT naDestroyAllBuffers(void)
 
 	if(!na_isinit) return false;
 
-	if(na_maxbuffers > 0) {
+	if(na_allocbuffers > 0) {
 		unsigned int i;
 
 		for(i=0;i<na_maxbuffers;i++)
@@ -112,6 +130,7 @@ N_API bool N_APIENTRY_EXPORT naDestroyAllBuffers(void)
 		if(success) {
 			nFreeMemory(na_buffers);
 			na_buffers = 0;
+			na_allocbuffers = 0;
 			na_maxbuffers = 0;
 		}
 	}
@@ -491,6 +510,25 @@ N_API unsigned int N_APIENTRY_EXPORT naCreateAudioStream(const wchar_t *fname, i
 }
 
 /*
+	Функция	: naCheckAudioStreamArray
+
+	Описание: Проверяет свободное место для аудиопотока в массиве
+
+	История	: 12.03.23	Создан
+
+*/
+static bool naCheckAudioStreamArray(void *array_el, bool set_free)
+{
+	na_audiostream_type *el;
+	
+	el = (na_audiostream_type *)array_el;
+	
+	if(set_free) el->used = false;
+	
+	return (el->used == false)?true:false;
+}
+
+/*
 	Функция	: naCreateAudioStreamEx
 
 	Описание: Создаёт аудиопоток
@@ -500,29 +538,23 @@ N_API unsigned int N_APIENTRY_EXPORT naCreateAudioStream(const wchar_t *fname, i
 */
 N_API unsigned int N_APIENTRY_EXPORT naCreateAudioStreamEx(const wchar_t **fname, unsigned int files, int loop)
 {
-	unsigned int i, j;
+	unsigned int i = 0, j;
 
 	if(!na_isinit) return 0;
 
 	nlPrint(LOG_FDEBUGFORMAT4, F_NACREATEAUDIOSTREAMEX, N_FNAMES, files); nlAddTab(1);
 
-	for(i = 0;i < na_maxaudiostreams;i++)
-		if(!na_audiostreams[i].used)
-			break;
-
-	if(i == na_maxaudiostreams) {
-		na_audiostream_type *_na_audiostreams;
-		_na_audiostreams = nReallocMemory(na_audiostreams, (na_maxaudiostreams+1024)*sizeof(na_audiostream_type));
-		if(_na_audiostreams)
-			na_audiostreams = _na_audiostreams;
-		else {
-			nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NACREATEAUDIOSTREAMEX, N_FALSE, N_ID, 0);
-			return false;
-		}
-		for(i=na_maxaudiostreams;i<na_maxaudiostreams+1024;i++)
-			na_audiostreams[i].used = false;
-		i = na_maxaudiostreams;
-		na_maxaudiostreams += 1024;
+	if(
+		!nArrayAdd(&n_ea, (void **)(&na_audiostreams),
+		&na_maxaudiostreams,
+		&na_allocaudiostreams,
+		naCheckAudioStreamArray,
+		&i,
+		NYAN_ARRAY_DEFAULT_STEP,
+		sizeof(na_audiostream_type))
+	) {
+		nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NACREATEAUDIOSTREAMEX, N_FALSE, N_ID, 0);
+		return false;
 	}
 
 	na_audiostreams[i].aud = nAllocMemory(files*sizeof(na_audiofile_type));
@@ -818,7 +850,7 @@ N_API bool N_APIENTRY_EXPORT naDestroyAllAudioStreams(void)
 
 	if(!na_isinit) return false;
 
-	if(na_maxaudiostreams > 0) {
+	if(na_allocaudiostreams > 0) {
 		unsigned int i;
 
 		for(i=0;i<na_maxaudiostreams;i++)
@@ -830,6 +862,7 @@ N_API bool N_APIENTRY_EXPORT naDestroyAllAudioStreams(void)
 		if(success) {
 			nFreeMemory(na_audiostreams);
 			na_audiostreams = 0;
+			na_allocaudiostreams = 0;
 			na_maxaudiostreams = 0;
 		}
 	}

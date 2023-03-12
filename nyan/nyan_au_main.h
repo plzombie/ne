@@ -28,7 +28,9 @@ typedef struct {
 } na_audiostream_type;
 
 extern na_buffer_type *na_buffers;
+extern unsigned int na_allocbuffers;
 extern unsigned int na_maxbuffers;
 
 extern na_audiostream_type *na_audiostreams;
+extern unsigned int na_allocaudiostreams;
 extern unsigned int na_maxaudiostreams;

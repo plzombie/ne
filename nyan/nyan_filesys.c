@@ -43,6 +43,9 @@
 	#define O_LARGEFILE 0
 #endif
 
+#include "../commonsrc/core/nyan_array.h"
+#include "nyan_apifordlls.h"
+
 #include "nyan_log_publicapi.h"
 #include "nyan_mem_publicapi.h"
 #include "nyan_filesys_publicapi.h"
@@ -60,9 +63,10 @@ typedef struct {
 
 static fs_file_type *fs_files;
 static unsigned int fs_maxfiles = 0; // Количество файлов
+static unsigned int fs_allocfiles = 0;
 
 static fs_fileplg_type *fs_fileplgs;
-static unsigned int fs_maxfileplgs = 0; // Количество файловых плагинов
+static unsigned int fs_maxfileplgs = 0; // Количество файловых плагиновs
 static unsigned int fs_allocfileplgs = 0;
 
 static wchar_t **fs_mounteddirs = 0;
@@ -424,6 +428,26 @@ N_API long long int N_APIENTRY_EXPORT nFileSeek(unsigned int id, long long int o
 }
 
 /*
+	Функция	: naCheckFileArray
+
+	Описание: Проверяет свободное место для файла в массиве
+
+	История	: 12.03.23	Создан
+
+*/
+static bool naCheckFileArray(void *array_el, bool set_free)
+{
+	fs_file_type *el;
+	
+	el = (fs_file_type *)array_el;
+	
+	if(set_free) el->used = false;
+	
+	return (el->used == false)?true:false;
+}
+
+
+/*
 	Функция	: nFileOpen
 
 	Описание: Открывает файл. Возвращает 0, если файл не был открыт
@@ -439,24 +463,18 @@ N_API unsigned int N_APIENTRY_EXPORT nFileOpen(const wchar_t *fname)
 
 	NLOCKFSMUTEX
 
-	for(i = 0;i < fs_maxfiles;i++)
-		if(!fs_files[i].used)
-			break;
+	if(
+		!nArrayAdd(&n_ea, (void **)(&fs_files),
+		&fs_maxfiles,
+		&fs_allocfiles,
+		naCheckFileArray,
+		&i,
+		NYAN_ARRAY_DEFAULT_STEP,
+		sizeof(fs_file_type))
+	) {
+		NUNLOCKFSMUTEX
 
-	if(i == fs_maxfiles) {
-		fs_file_type *_fs_files;
-		_fs_files = nReallocMemory(fs_files,(fs_maxfiles+1024)*sizeof(fs_file_type));
-		if(_fs_files)
-			fs_files = _fs_files;
-		else {
-			NUNLOCKFSMUTEX
-
-			return 0;
-		}
-		for(i=fs_maxfiles;i<fs_maxfiles+1024;i++)
-			fs_files[i].used = false;
-		i = fs_maxfiles;
-		fs_maxfiles += 1024;
+		return 0;
 	}
 
 	for(id = 0; id < fs_maxfileplgs; id++)
@@ -569,7 +587,7 @@ N_API bool N_APIENTRY_EXPORT nCloseAllFiles(void)
 
 	NLOCKFSMUTEX
 
-	if(fs_maxfiles) {
+	if(fs_allocfiles) {
 		unsigned int i;
 		bool success = true;
 
@@ -580,17 +598,21 @@ N_API bool N_APIENTRY_EXPORT nCloseAllFiles(void)
 
 		if(success) {
 			fs_maxfiles = 0;
+			fs_allocfiles = 0;
 			nFreeMemory(fs_files);
 			fs_files = 0;
 		} else
 			gsuccess = false;
 	}
 
-	if(fs_maxmounteddirs) {
+	if(fs_allocmounteddirs) {
 		unsigned int i;
+		
 		for(i=0;i<fs_maxmounteddirs;i++)
 			nFreeMemory(fs_mounteddirs[i]);
-		nFreeMemory(fs_mounteddirs);
+		if(fs_maxmounteddirs)
+			nFreeMemory(fs_mounteddirs);
+
 		fs_mounteddirs = 0;
 		fs_maxmounteddirs = 0;
 		fs_allocmounteddirs = 0;
@@ -614,6 +636,7 @@ N_API bool N_APIENTRY_EXPORT nCloseAllFiles(void)
 N_API bool N_APIENTRY_EXPORT nMountDir(const wchar_t *dirname)
 {
 	size_t dirname_len;
+	unsigned int new_dir;
 
 	dirname_len = wcslen(dirname);
 	
@@ -622,6 +645,7 @@ N_API bool N_APIENTRY_EXPORT nMountDir(const wchar_t *dirname)
 
 	NLOCKFSMUTEX
 
+#if 0
 	if(fs_maxmounteddirs == fs_allocmounteddirs) {
 		wchar_t **_fs_mounteddirs;
 		_fs_mounteddirs = nReallocMemory(fs_mounteddirs,(fs_allocmounteddirs+1024)*sizeof(wchar_t *));
@@ -635,38 +659,46 @@ N_API bool N_APIENTRY_EXPORT nMountDir(const wchar_t *dirname)
 		}
 		fs_allocmounteddirs += 1024;
 	}
+#else
+	if(
+		!nArrayAdd(&n_ea, (void **)(&fs_mounteddirs),
+		&fs_maxmounteddirs,
+		&fs_allocmounteddirs,
+		naCheckArrayAlwaysFalse,
+		&new_dir,
+		NYAN_ARRAY_DEFAULT_STEP,
+		sizeof(wchar_t *))
+	) {
+		
+	}
+#endif
 
 	if((dirname[dirname_len-1] == L'\\') || (dirname[dirname_len-1] == L'/')) {
-		fs_mounteddirs[fs_maxmounteddirs] = nAllocMemory((dirname_len+1)*sizeof(wchar_t));
-		if(!fs_mounteddirs[fs_maxmounteddirs]) {
-			NUNLOCKFSMUTEX
-			nlPrint(LOG_FDEBUGFORMAT,F_NMOUNTDIR,N_FALSE);
-
-			return false;
-		}
-		wmemcpy(fs_mounteddirs[fs_maxmounteddirs],dirname,dirname_len+1);
+		fs_mounteddirs[new_dir] = nAllocMemory((dirname_len+1)*sizeof(wchar_t));
+		if(!fs_mounteddirs[new_dir]) goto NMOUNTDIR_ERROR;
+		wmemcpy(fs_mounteddirs[new_dir],dirname,dirname_len+1);
 		//wcscpy(fs_mounteddirs[fs_maxmounteddirs],dirname);
 	} else { // Если нет слэша, то надо его добавить
-		fs_mounteddirs[fs_maxmounteddirs] = nAllocMemory((dirname_len+2)*sizeof(wchar_t));
-		if(!fs_mounteddirs[fs_maxmounteddirs]) {
-			NUNLOCKFSMUTEX
-			nlPrint(LOG_FDEBUGFORMAT,F_NMOUNTDIR,N_FALSE);
-
-			return false;
-		}
-		//wcscpy(fs_mounteddirs[fs_maxmounteddirs],dirname);
-		wmemcpy(fs_mounteddirs[fs_maxmounteddirs],dirname,dirname_len);
-		fs_mounteddirs[fs_maxmounteddirs][dirname_len] = L'/';
-		fs_mounteddirs[fs_maxmounteddirs][dirname_len+1] = 0;
+		fs_mounteddirs[new_dir] = nAllocMemory((dirname_len+2)*sizeof(wchar_t));
+		if(!fs_mounteddirs[new_dir]) goto NMOUNTDIR_ERROR;
+		//wcscpy(fs_mounteddirs[new_dir],dirname);
+		wmemcpy(fs_mounteddirs[new_dir],dirname,dirname_len);
+		fs_mounteddirs[new_dir][dirname_len] = L'/';
+		fs_mounteddirs[new_dir][dirname_len+1] = 0;
 	}
 
-	nlPrint(LOG_FDEBUGFORMAT7, F_NMOUNTDIR, N_MOUNTDIR, fs_mounteddirs[fs_maxmounteddirs]);
-
-	fs_maxmounteddirs++;
+	nlPrint(LOG_FDEBUGFORMAT7, F_NMOUNTDIR, N_MOUNTDIR, fs_mounteddirs[new_dir]);
 
 	NUNLOCKFSMUTEX
 
 	return true;
+	
+NMOUNTDIR_ERROR:
+
+	NUNLOCKFSMUTEX
+	nlPrint(LOG_FDEBUGFORMAT,F_NMOUNTDIR,N_FALSE);
+
+	return false;
 }
 
 /*
@@ -704,6 +736,8 @@ N_API bool N_APIENTRY_EXPORT nMountArchive(const wchar_t *arcname)
 */
 N_API bool N_APIENTRY_EXPORT nAddFilePlugin(const wchar_t *name, fs_fileplg_type *fs_fileplg)
 {
+	unsigned int new_plugin = 0;
+	
 	if(fs_fileplg->size != sizeof(fs_fileplg_type)) {
 		nlPrint(LOG_FDEBUGFORMAT, F_NADDFILEPLUGIN, N_FALSE);
 
@@ -712,6 +746,7 @@ N_API bool N_APIENTRY_EXPORT nAddFilePlugin(const wchar_t *name, fs_fileplg_type
 
 	NLOCKFSMUTEX
 
+#if 0
 	if(!fs_allocfileplgs) {
 		fs_fileplgs = nAllocMemory(1024*sizeof(fs_fileplg_type));
 		if(!fs_fileplgs) {
@@ -734,23 +769,34 @@ N_API bool N_APIENTRY_EXPORT nAddFilePlugin(const wchar_t *name, fs_fileplg_type
 		}
 		fs_allocfileplgs += 1024;
 	}
+#else
+	if(
+		!nArrayAdd(&n_ea, (void **)(&fs_fileplgs),
+		&fs_maxfileplgs,
+		&fs_allocfileplgs,
+		naCheckArrayAlwaysFalse,
+		&new_plugin,
+		NYAN_ARRAY_DEFAULT_STEP,
+		sizeof(fs_fileplg_type))
+	) goto NADDFILEPLUGIN_ERROR;
+#endif
 
-	fs_fileplgs[fs_maxfileplgs] = *fs_fileplg;
+	fs_fileplgs[new_plugin] = *fs_fileplg;
 
-	if(!fs_fileplg->plgInit()) {
-		NUNLOCKFSMUTEX
-		nlPrint(LOG_FDEBUGFORMAT, F_NADDFILEPLUGIN, N_FALSE);
-
-		return false;
-	}
-
-	fs_maxfileplgs++;
+	if(!fs_fileplg->plgInit()) goto NADDFILEPLUGIN_ERROR;
 
 	NUNLOCKFSMUTEX
 
 	nlPrint(LOG_FDEBUGFORMAT7, F_NADDFILEPLUGIN, N_ADDFILEPLUGIN, name);
 
 	return true;
+	
+NADDFILEPLUGIN_ERROR:
+
+	NUNLOCKFSMUTEX
+	nlPrint(LOG_FDEBUGFORMAT, F_NADDFILEPLUGIN, N_FALSE);
+
+	return false;
 }
 
 /*

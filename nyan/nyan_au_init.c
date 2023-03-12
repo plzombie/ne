@@ -10,6 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../commonsrc/core/nyan_array.h"
+
 #include "nyan_au_init_publicapi.h"
 #include "nyan_au_main_publicapi.h"
 #include "nyan_log_publicapi.h"
@@ -397,6 +399,26 @@ N_API void N_APIENTRY_EXPORT naUnloadAudioFile(na_audiofile_type *aud)
 	NUNLOCKAFMUTEX
 }
 
+
+/*
+	Функция	: naCheckAudioPluginArray
+
+	Описание: Проверяет свободное место для плагина в массиве
+
+	История	: 12.03.23	Создан
+
+*/
+static bool naCheckAudioPluginArray(void *array_el, bool set_free)
+{
+	na_audiofile_protected_plugin_type *el;
+	
+	el = (na_audiofile_protected_plugin_type *)array_el;
+	
+	if(set_free) el->usecounter = 0;
+	
+	return (el->usecounter == 0)?true:false;
+}
+
 /*
 	Функция	: naAddAudioFilePlugin
 
@@ -407,6 +429,8 @@ N_API void N_APIENTRY_EXPORT naUnloadAudioFile(na_audiofile_type *aud)
 */
 N_API bool N_APIENTRY_EXPORT naAddAudioFilePlugin(const wchar_t *name, na_audiofile_plugin_type *au_fileplg)
 {
+	unsigned int new_plugin = 0;
+	
 	if(au_fileplg->size != sizeof(na_audiofile_plugin_type)) {
 		nlPrint(LOG_FDEBUGFORMAT, F_NAADDAUDIOFILEPLUGIN, N_FALSE);
 		return false;
@@ -414,41 +438,21 @@ N_API bool N_APIENTRY_EXPORT naAddAudioFilePlugin(const wchar_t *name, na_audiof
 
 	NLOCKAFMUTEX
 
-	if(!na_audiofile_allocplugins) {
-		unsigned int i;
-
-		na_audiofile_plugins = nAllocMemory(1024*sizeof(na_audiofile_protected_plugin_type));
-		if(!na_audiofile_plugins) {
-			NUNLOCKAFMUTEX
-			nlPrint(LOG_FDEBUGFORMAT, F_NAADDAUDIOFILEPLUGIN, N_FALSE);
-			return false;
-		}
-		na_audiofile_allocplugins = 1024;
-
-		for(i = 0; i < na_audiofile_allocplugins; i++)
-			na_audiofile_plugins[i].usecounter = 0;
-	} else if(na_audiofile_maxplugins == na_audiofile_allocplugins) {
-		unsigned int i;
-		na_audiofile_protected_plugin_type *_na_audiofile_plugins;
-
-		_na_audiofile_plugins = nReallocMemory(na_audiofile_plugins, (na_audiofile_allocplugins+1024)*sizeof(na_audiofile_protected_plugin_type));
-		if(_na_audiofile_plugins)
-			na_audiofile_plugins = _na_audiofile_plugins;
-		else {
-			NUNLOCKAFMUTEX
-			nlPrint(LOG_FDEBUGFORMAT, F_NAADDAUDIOFILEPLUGIN, N_FALSE);
-			return false;
-		}
-		na_audiofile_allocplugins += 1024;
-
-		for(i = na_audiofile_allocplugins-1024; i < na_audiofile_allocplugins; i++)
-			na_audiofile_plugins[i].usecounter = 0;
+	if(
+		!nArrayAdd(&n_ea, (void **)(&na_audiofile_plugins),
+		&na_audiofile_maxplugins,
+		&na_audiofile_allocplugins,
+		naCheckAudioPluginArray,
+		&new_plugin,
+		NYAN_ARRAY_DEFAULT_STEP,
+		sizeof(na_audiofile_protected_plugin_type))
+	) {
+		NUNLOCKAFMUTEX
+		nlPrint(LOG_FDEBUGFORMAT, F_NAADDAUDIOFILEPLUGIN, N_FALSE);
+		return false;
 	}
-
-	na_audiofile_plugins[na_audiofile_maxplugins].plugin = *au_fileplg;
-	na_audiofile_plugins[na_audiofile_maxplugins].usecounter++;
-
-	na_audiofile_maxplugins++;
+	na_audiofile_plugins[new_plugin].plugin = *au_fileplg;
+	na_audiofile_plugins[new_plugin].usecounter++;
 
 	NUNLOCKAFMUTEX
 
