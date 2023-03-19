@@ -14,14 +14,14 @@
 typedef bool (* nyan_array_check_type)(void *array_el, bool set_free);
 
 /*
-	Функция	: naCheckArrayAlwaysFalse
+	Функция	: nCheckArrayAlwaysFalse
 
 	Описание: Проверяет свободное место в массиве, возвращает set_free
 
 	История	: 12.03.23	Создан
 
 */
-bool naCheckArrayAlwaysFalse(void *array_el, bool set_free)
+bool nCheckArrayAlwaysFalse(void *array_el, bool set_free)
 {
 	(void)array_el;
 	

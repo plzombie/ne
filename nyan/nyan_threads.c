@@ -313,14 +313,14 @@ void *nThreadsLib_threadproc(void *args)
 #endif
 
 /*
-	Функция	: naCheckTaskArray
+	Функция	: nCheckTaskArray
 
 	Описание: Проверяет свободное место для задачи в массиве
 
 	История	: 12.03.23	Создан
 
 */
-static bool naCheckTaskArray(void *array_el, bool set_free)
+static bool nCheckTaskArray(void *array_el, bool set_free)
 {
 	n_task_type *el;
 	
@@ -354,7 +354,7 @@ N_API unsigned int N_APIENTRY_EXPORT nCreateTask(void N_APIENTRY func(void *para
 		&n_ea, (void **)(&n_tasks),
 		&n_maxtasks,
 		&n_alloctasks,
-		naCheckTaskArray,
+		nCheckTaskArray,
 		&i,
 		(n_nofrealthreads < 32)?32:n_nofrealthreads,
 		sizeof(n_task_type))

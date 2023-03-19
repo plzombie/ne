@@ -31,6 +31,9 @@
 
 #include "nyan_nglapi.h"
 
+#include "nyan_apifordlls.h"
+#include "../commonsrc/core/nyan_array.h"
+
 #define NEK2_READERVERSION 0
 
 typedef struct {
@@ -76,7 +79,26 @@ typedef struct {
 #define NV_3DMODEL_STATUS_LOADED 2
 
 static nv_3dmodel_type *nv_3dmodels;
-static unsigned int nv_max3dmodels = 0;
+static unsigned int nv_max3dmodels = 0, nv_alloc3dmodels = 0;
+
+/*
+	Функция	: nvCheck3dModelArray
+
+	Описание: Проверяет свободное место для 3d модели в массиве
+
+	История	: 19.03.23	Создан
+
+*/
+static bool nvCheck3dModelArray(void *array_el, bool set_free)
+{
+	nv_3dmodel_type *el;
+	
+	el = (nv_3dmodel_type *)array_el;
+	
+	if(set_free) el->status = NV_3DMODEL_STATUS_FREE;
+	
+	return (el->status == NV_3DMODEL_STATUS_FREE)?true:false;
+}
 
 /*
 	Функция	: nvCreate3dModel
@@ -100,23 +122,17 @@ N_API unsigned int N_APIENTRY_EXPORT nvCreate3dModel(const wchar_t *filename, co
 	nlPrint(LOG_FDEBUGFORMAT7, F_NVCREATE3DMODEL, N_FNAME, filename); nlAddTab(1);
 
 	// Поиск свободного id для 3д модели или выделение памяти под новый id
-	for(i = 0;i < nv_max3dmodels;i++)
-		if(nv_3dmodels[i].status == NV_3DMODEL_STATUS_FREE)
-			break;
-
-	if(i == nv_max3dmodels) {
-		nv_3dmodel_type *_nv_3dmodels;
-		_nv_3dmodels = nReallocMemory(nv_3dmodels, (nv_max3dmodels+1024)*sizeof(nv_3dmodel_type));
-		if(_nv_3dmodels)
-			nv_3dmodels = _nv_3dmodels;
-		else {
-			nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NVCREATE3DMODEL, N_FALSE, N_ID, 0);
-			return 0;
-		}
-		for(i=nv_max3dmodels;i<nv_max3dmodels+1024;i++)
-			nv_3dmodels[i].status = NV_3DMODEL_STATUS_FREE;
-		i = nv_max3dmodels;
-		nv_max3dmodels += 1024;
+	if(!nArrayAdd(
+		&n_ea, (void **)(&nv_3dmodels),
+		&nv_max3dmodels,
+		&nv_alloc3dmodels,
+		nvCheck3dModelArray,
+		&i,
+		NYAN_ARRAY_DEFAULT_STEP,
+		sizeof(nv_3dmodel_type))
+	) {
+		nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NVCREATE3DMODEL, N_FALSE, N_ID, 0);
+		return 0;
 	}
 
 	// Копирование имени 3d модели
@@ -504,11 +520,12 @@ N_API void N_APIENTRY_EXPORT nvDestroyAll3dModels(void)
 
 	if(nv_draw_state != NV_DRAW_STATE_NO) return;
 
-	if(nv_max3dmodels) {
+	if(nv_alloc3dmodels) {
 		for(id = 1; id <= nv_max3dmodels; id++)
 			if(nv_3dmodels[id-1].status != NV_3DMODEL_STATUS_FREE)
 				nvDestroy3dModel(id);
 
+		nv_alloc3dmodels = 0;
 		nv_max3dmodels = 0;
 		nFreeMemory(nv_3dmodels);
 		nv_3dmodels = 0;

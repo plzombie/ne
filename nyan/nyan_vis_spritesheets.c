@@ -25,6 +25,9 @@
 
 #include "../nyan_container/nyan_format_nek3spritesheets.h"
 
+#include "nyan_apifordlls.h"
+#include "../commonsrc/core/nyan_array.h"
+
 #include <string.h>
 
 typedef struct {
@@ -37,7 +40,26 @@ typedef struct {
 } nv_spritesheet_type;
 
 static nv_spritesheet_type *nv_spritesheets;
-static unsigned int nv_maxspritesheets = 0;
+static unsigned int nv_maxspritesheets = 0, nv_allocspritesheets = 0;
+
+/*
+	Функция	: nvCheckSpriteSheetArray
+
+	Описание: Проверяет свободное место для sprite sheet в массиве
+
+	История	: 19.03.23	Создан
+
+*/
+static bool nvCheckSpriteSheetArray(void *array_el, bool set_free)
+{
+	nv_spritesheet_type *el;
+	
+	el = (nv_spritesheet_type *)array_el;
+	
+	if(set_free) el->isused = false;
+	
+	return (el->isused)?true:false;
+}
 
 /*
 	Функция	: nvCreateEmptySpriteSheet
@@ -52,25 +74,18 @@ static unsigned int nvCreateEmptySpriteSheet(unsigned int spritetype)
 	unsigned int i;
 
 	// Выделение памяти под структуры
-	for(i = 0;i < nv_maxspritesheets;i++)
-		if(nv_spritesheets[i].isused == false)
-			break;
-
-	if(i == nv_maxspritesheets) {
-		nv_spritesheet_type *_nv_spritesheets;
-		_nv_spritesheets = nReallocMemory(nv_spritesheets, (nv_maxspritesheets+1024)*sizeof(nv_spritesheet_type));
-		if(_nv_spritesheets)
-			nv_spritesheets = _nv_spritesheets;
-		else {
-			nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NVCREATEEMPTYSPRITESHEET, N_FALSE, N_ID, 0);
-			return false;
-		}
-		for(i=nv_maxspritesheets;i<nv_maxspritesheets+1024;i++)
-			nv_spritesheets[i].isused = false;
-		i = nv_maxspritesheets;
-		nv_maxspritesheets += 1024;
+	if(!nArrayAdd(
+		&n_ea, (void **)(&nv_spritesheets),
+		&nv_maxspritesheets,
+		&nv_allocspritesheets,
+		nvCheckSpriteSheetArray,
+		&i,
+		NYAN_ARRAY_DEFAULT_STEP,
+		sizeof(nv_spritesheet_type))
+	) {
+		nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NVCREATEEMPTYSPRITESHEET, N_FALSE, N_ID, 0);
+		return false;
 	}
-
 
 	nv_spritesheets[i].nofsprites = 0;
 	nv_spritesheets[i].spritetype = spritetype;
@@ -474,7 +489,7 @@ N_API bool N_APIENTRY_EXPORT nvDestroySpriteSheet(unsigned int ssheetid)
 */
 N_API void N_APIENTRY_EXPORT nvDestroyAllSpriteSheets(void)
 {
-	if(nv_maxspritesheets) {
+	if(nv_allocspritesheets) {
 		unsigned int i;
 
 		for(i = 0; i < nv_maxspritesheets; i++) {
@@ -484,6 +499,7 @@ N_API void N_APIENTRY_EXPORT nvDestroyAllSpriteSheets(void)
 
 		nFreeMemory(nv_spritesheets);
 		nv_spritesheets = 0;
+		nv_allocspritesheets = 0;
 		nv_maxspritesheets = 0;
 	}
 }

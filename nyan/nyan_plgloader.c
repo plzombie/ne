@@ -52,7 +52,7 @@ N_API bool N_APIENTRY_EXPORT nAddPlugin(const wchar_t *dllname)
 		&n_ea, (void **)(&dllhandles),
 		&maxdllhandles,
 		&allocdllhandles,
-		naCheckArrayAlwaysFalse,
+		nCheckArrayAlwaysFalse,
 		&new_plugin,
 		NYAN_ARRAY_DEFAULT_STEP,
 		sizeof(void *))

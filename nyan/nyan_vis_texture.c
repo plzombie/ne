@@ -22,8 +22,11 @@
 
 #include "nyan_nglapi.h"
 
+#include "nyan_apifordlls.h"
+#include "../commonsrc/core/nyan_array.h"
+
 nv_texobj_type *nv_texobjs = 0;
-unsigned int nv_maxtexobjs = 0;
+unsigned int nv_maxtexobjs = 0, nv_alloctexobjs = 0;
 
 uintptr_t nv_textures_sync_mutex = 0; // Мьютекс для синхронизации работы с текстурами
 
@@ -33,6 +36,25 @@ uintptr_t nv_textures_sync_mutex = 0; // Мьютекс для синхрони�
 static nv_tex_plugin_type *nv_tex_plugins;
 static unsigned int nv_tex_maxplugins = 0;
 static unsigned int nv_tex_allocplugins = 0;
+
+/*
+	Функция	: nvCheckTextureArray
+
+	Описание: Проверяет свободное место для текстуры в массиве
+
+	История	: 19.03.23	Создан
+
+*/
+static bool nvCheckTextureArray(void *array_el, bool set_free)
+{
+	nv_texobj_type *el;
+	
+	el = (nv_texobj_type *)array_el;
+	
+	if(set_free) el->status = NV_TEX_STATUS_FREE;
+	
+	return (el->status == NV_TEX_STATUS_FREE)?true:false;
+}
 
 /*
 	Функция	: nvCreateTexture
@@ -52,24 +74,18 @@ N_API unsigned int N_APIENTRY_EXPORT nvCreateTexture(int flags)
 
 	NVLOCKTEXTURESYNCMUTEX
 		// Выделение памяти под структуры
-		for(i = 0;i < nv_maxtexobjs;i++)
-			if(nv_texobjs[i].status == NV_TEX_STATUS_FREE)
-				break;
-
-		if(i == nv_maxtexobjs) {
-			nv_texobj_type *_nv_texobjs;
-			_nv_texobjs = nReallocMemory(nv_texobjs, (nv_maxtexobjs+1024)*sizeof(nv_texobj_type));
-			if(_nv_texobjs)
-				nv_texobjs = _nv_texobjs;
-			else {
-				NVUNLOCKTEXTURESYNCMUTEX
-				nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NVCREATETEXTURE, N_FALSE, N_ID, 0);
-				return false;
-			}
-			for(i=nv_maxtexobjs;i<nv_maxtexobjs+1024;i++)
-				nv_texobjs[i].status = NV_TEX_STATUS_FREE;
-			i = nv_maxtexobjs;
-			nv_maxtexobjs += 1024;
+		if(!nArrayAdd(
+			&n_ea, (void **)(&nv_texobjs),
+			&nv_maxtexobjs,
+			&nv_alloctexobjs,
+			nvCheckTextureArray,
+			&i,
+			NYAN_ARRAY_DEFAULT_STEP,
+			sizeof(nv_texobj_type))
+		) {
+			NVUNLOCKTEXTURESYNCMUTEX
+			nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NVCREATETEXTURE, N_FALSE, N_ID, 0);
+			return false;
 		}
 
 		nv_texobjs[i].status = NV_TEX_STATUS_EMPTY;
@@ -493,7 +509,7 @@ N_API void N_APIENTRY_EXPORT nvDestroyAllTextures(void)
 	if(!nv_isinit) return;
 
 	NVLOCKTEXTURESYNCMUTEX
-		if(nv_maxtexobjs > 0) {
+		if(nv_alloctexobjs > 0) {
 			unsigned int i;
 
 			for(i=0;i<nv_maxtexobjs;i++)
@@ -502,6 +518,7 @@ N_API void N_APIENTRY_EXPORT nvDestroyAllTextures(void)
 
 			nFreeMemory(nv_texobjs);
 			nv_texobjs = 0;
+			nv_alloctexobjs = 0;
 			nv_maxtexobjs = 0;
 		}
 	NVUNLOCKTEXTURESYNCMUTEX
@@ -700,36 +717,29 @@ unsigned int nvGetNGLTextureId(unsigned int id)
 */
 N_API bool N_APIENTRY_EXPORT nvAddTexturePlugin(const wchar_t *name, nv_tex_plugin_type *nv_texplg)
 {
+	unsigned int new_plugin;
+	
 	if(nv_texplg->size != sizeof(nv_tex_plugin_type)) {
 		nlPrint(LOG_FDEBUGFORMAT, F_NVADDTEXTUREPLUGIN, N_FALSE);
 		return false;
 	}
 
 	NVLOCKTEXTURESYNCMUTEX
-		if(!nv_tex_allocplugins) {
-			nv_tex_plugins = nAllocMemory(1024*sizeof(nv_tex_plugin_type));
-			if(!nv_tex_plugins) {
-				NVUNLOCKTEXTURESYNCMUTEX
-				nlPrint(LOG_FDEBUGFORMAT, F_NVADDTEXTUREPLUGIN, N_FALSE);
-				return false;
-			}
-			nv_tex_allocplugins = 1024;
-		} else if(nv_tex_maxplugins == nv_tex_allocplugins) {
-			nv_tex_plugin_type *_nv_tex_plugins;
-			_nv_tex_plugins = nReallocMemory(nv_tex_plugins, (nv_tex_allocplugins+1024)*sizeof(nv_tex_plugin_type));
-			if(_nv_tex_plugins)
-				nv_tex_plugins = _nv_tex_plugins;
-			else {
-				NVUNLOCKTEXTURESYNCMUTEX
-				nlPrint(LOG_FDEBUGFORMAT, F_NVADDTEXTUREPLUGIN, N_FALSE);
-				return false;
-			}
-			nv_tex_allocplugins += 1024;
+		if(!nArrayAdd(
+			&n_ea, (void **)(&nv_tex_plugins),
+			&nv_tex_maxplugins,
+			&nv_tex_allocplugins,
+			nCheckArrayAlwaysFalse,
+			&new_plugin,
+			NYAN_ARRAY_DEFAULT_STEP,
+			sizeof(nv_tex_plugin_type))
+		) {
+			NVUNLOCKTEXTURESYNCMUTEX
+			nlPrint(LOG_FDEBUGFORMAT, F_NVADDTEXTUREPLUGIN, N_FALSE);
+			return false;
 		}
 
-		nv_tex_plugins[nv_tex_maxplugins] = *nv_texplg;
-
-		nv_tex_maxplugins++;
+		nv_tex_plugins[new_plugin] = *nv_texplg;
 	NVUNLOCKTEXTURESYNCMUTEX
 
 	nlPrint(LOG_FDEBUGFORMAT7, F_NVADDTEXTUREPLUGIN, NV_ADDTEXTUREPLUGIN, name);
@@ -748,7 +758,7 @@ N_API bool N_APIENTRY_EXPORT nvAddTexturePlugin(const wchar_t *name, nv_tex_plug
 N_API void N_APIENTRY_EXPORT nvDeleteAllTexturePlugins(void)
 {
 	NVLOCKTEXTURESYNCMUTEX
-		if(nv_tex_maxplugins) nFreeMemory(nv_tex_plugins);
+		if(nv_tex_allocplugins) nFreeMemory(nv_tex_plugins);
 
 		nv_tex_plugins = 0;
 		nv_tex_maxplugins = 0;

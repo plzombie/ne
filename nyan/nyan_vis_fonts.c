@@ -30,6 +30,9 @@
 
 #include "nyan_nglapi.h"
 
+#include "nyan_apifordlls.h"
+#include "../commonsrc/core/nyan_array.h"
+
 #include "../nyan_container/nyan_container_ne_helpers.h"
 #include "../nyan_container/nyan_format_nek1fonts.h"
 
@@ -52,7 +55,7 @@ typedef struct {
 } nv_font_type;
 
 static nv_font_type *nv_fonts;
-static unsigned int nv_maxfonts = 0;
+static unsigned int nv_maxfonts = 0, nv_allocfonts = 0;
 
 nv_2dvertex_type *nv_fontvertexbuf = 0;
 unsigned int nv_fontvertexbufsize = 0;
@@ -70,6 +73,24 @@ int KPairsCompare(const void* p1, const void* p2)
 	return (int)(((nv_kpair_ingame_type *)p1)->symbol2)-(int)(((nv_kpair_ingame_type *)p2)->symbol2);
 }
 
+/*
+	Функция	: nvCheckFontArray
+
+	Описание: Проверяет свободное место для шрифта в массиве
+
+	История	: 19.03.23	Создан
+
+*/
+static bool nvCheckFontArray(void *array_el, bool set_free)
+{
+	nv_font_type *el;
+	
+	el = (nv_font_type *)array_el;
+	
+	if(set_free) el->used = false;
+	
+	return (el->used)?true:false;
+}
 
 /*
 	Функция	: nvCreateFont
@@ -93,28 +114,17 @@ N_API bool N_APIENTRY_EXPORT nvCreateFont(const wchar_t *fname)
 	nlPrint(LOG_FDEBUGFORMAT7, F_NVCREATEFONT, N_FNAME, fname); nlAddTab(1);
 
 	// Выделение памяти под шрифты
-	for(i = 0;i < nv_maxfonts;i++)
-		if(!nv_fonts[i].used)
-			break;
-
-	if(i == nv_maxfonts) {
-		nv_font_type *_nv_fonts;
-
-		_nv_fonts = nReallocMemory(nv_fonts, (nv_maxfonts+1024)*sizeof(nv_font_type));
-
-		if(_nv_fonts)
-			nv_fonts = _nv_fonts;
-		else {
-			nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NVCREATEFONT, N_FALSE, N_ID, 0);
-			return false;
-		}
-
-		for(i=nv_maxfonts;i<nv_maxfonts+1024;i++)
-			nv_fonts[i].used = false;
-
-		i = nv_maxfonts;
-
-		nv_maxfonts += 1024;
+	if(!nArrayAdd(
+		&n_ea, (void **)(&nv_fonts),
+		&nv_maxfonts,
+		&nv_allocfonts,
+		nvCheckFontArray,
+		&i,
+		NYAN_ARRAY_DEFAULT_STEP,
+		sizeof(nv_font_type))
+	) {
+		nlAddTab(-1); nlPrint(LOG_FDEBUGFORMAT5, F_NVCREATEFONT, N_FALSE, N_ID, 0);
+		return false;
 	}
 
 	f = nFileOpen(fname);
@@ -400,12 +410,13 @@ N_API void N_APIENTRY_EXPORT nvDestroyAllFonts(void)
 {
 	if(!nv_isinit) return;
 
-	if(nv_maxfonts) {
+	if(nv_allocfonts) {
 		unsigned int i;
 		for(i = 1;i <= nv_maxfonts;i++)
 			nvDestroyFont(i);
 		nFreeMemory(nv_fonts);
 		nv_fonts = 0;
+		nv_allocfonts = 0;
 		nv_maxfonts = 0;
 	}
 }

@@ -428,14 +428,14 @@ N_API long long int N_APIENTRY_EXPORT nFileSeek(unsigned int id, long long int o
 }
 
 /*
-	Функция	: naCheckFileArray
+	Функция	: nCheckFileArray
 
 	Описание: Проверяет свободное место для файла в массиве
 
 	История	: 12.03.23	Создан
 
 */
-static bool naCheckFileArray(void *array_el, bool set_free)
+static bool nCheckFileArray(void *array_el, bool set_free)
 {
 	fs_file_type *el;
 	
@@ -467,7 +467,7 @@ N_API unsigned int N_APIENTRY_EXPORT nFileOpen(const wchar_t *fname)
 		!nArrayAdd(&n_ea, (void **)(&fs_files),
 		&fs_maxfiles,
 		&fs_allocfiles,
-		naCheckFileArray,
+		nCheckFileArray,
 		&i,
 		NYAN_ARRAY_DEFAULT_STEP,
 		sizeof(fs_file_type))
@@ -644,34 +644,17 @@ N_API bool N_APIENTRY_EXPORT nMountDir(const wchar_t *dirname)
 		return true;
 
 	NLOCKFSMUTEX
-
-#if 0
-	if(fs_maxmounteddirs == fs_allocmounteddirs) {
-		wchar_t **_fs_mounteddirs;
-		_fs_mounteddirs = nReallocMemory(fs_mounteddirs,(fs_allocmounteddirs+1024)*sizeof(wchar_t *));
-		if(_fs_mounteddirs)
-			fs_mounteddirs = _fs_mounteddirs;
-		else {
-			NUNLOCKFSMUTEX
-			nlPrint(LOG_FDEBUGFORMAT,F_NMOUNTDIR,N_FALSE);
-
-			return false;
-		}
-		fs_allocmounteddirs += 1024;
-	}
-#else
 	if(
 		!nArrayAdd(&n_ea, (void **)(&fs_mounteddirs),
 		&fs_maxmounteddirs,
 		&fs_allocmounteddirs,
-		naCheckArrayAlwaysFalse,
+		nCheckArrayAlwaysFalse,
 		&new_dir,
 		NYAN_ARRAY_DEFAULT_STEP,
 		sizeof(wchar_t *))
 	) {
 		
 	}
-#endif
 
 	if((dirname[dirname_len-1] == L'\\') || (dirname[dirname_len-1] == L'/')) {
 		fs_mounteddirs[new_dir] = nAllocMemory((dirname_len+1)*sizeof(wchar_t));
@@ -750,7 +733,7 @@ N_API bool N_APIENTRY_EXPORT nAddFilePlugin(const wchar_t *name, fs_fileplg_type
 		!nArrayAdd(&n_ea, (void **)(&fs_fileplgs),
 		&fs_maxfileplgs,
 		&fs_allocfileplgs,
-		naCheckArrayAlwaysFalse,
+		nCheckArrayAlwaysFalse,
 		&new_plugin,
 		NYAN_ARRAY_DEFAULT_STEP,
 		sizeof(fs_fileplg_type))

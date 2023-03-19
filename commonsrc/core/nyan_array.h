@@ -15,5 +15,5 @@
 
 typedef bool (* nyan_array_check_type)(void *array_el, bool set_free);
 
-extern bool naCheckArrayAlwaysFalse(void *array_el, bool set_free);
+extern bool nCheckArrayAlwaysFalse(void *array_el, bool set_free);
 extern bool nArrayAdd(engapi_type *ea, void **array, unsigned int *array_max, unsigned int *array_alloc, nyan_array_check_type nyan_array_check, unsigned int *array_addel, unsigned int array_alloc_step, size_t array_el_len);
