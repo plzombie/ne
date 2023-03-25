@@ -45,6 +45,7 @@ NYAN_MAIN
 			nvDraw2dText(L"abcdefghijklmnopqrstuvwxyz", 32, 80, fontid, texid, 1.0, 1.0, CRED);
 			nvDraw2dText(L"ABCDEFGHIJKLMNOPQRSTUVWXYZ", 32, 130, fontid, texid, 1.0, 1.0, CGREEN);
 			nvDraw2dText(L"Line\nSeparator\n\nAnother\none", 32, 180, fontid, texid, 1.0, 1.0, CGREEN);
+			nvDraw2dText(L"\xC4\xE4 \xC5\xE5 \xC6\xE6 \xD1\xF1 \xD6\xF6 \xD8\xF8 \xDC\xFC \x160\x161 \x17D\x17E \x1E9E\xDF", 32, 280, fontid, texid, 1.0, 1.0, CBLUE);
 		nvEnd2d();
 		nUpdate();
 	}
