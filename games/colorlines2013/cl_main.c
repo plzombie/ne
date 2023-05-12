@@ -59,6 +59,7 @@ bool clLoadGameResources(void)
 
 	cl_fontid = nvCreateFont(L"deffont.nek1");
 	if(!cl_fontid) return false;
+	nvSetFontEmptySymFromDefault(cl_fontid);
 
 	return true;
 }

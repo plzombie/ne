@@ -18,6 +18,8 @@
 NYAN_FUNC(bool, nvCreateFont, (const wchar_t *fname))
 NYAN_FUNC(bool, nvDestroyFont, (unsigned int id))
 NYAN_FUNC(void, nvDestroyAllFonts, (void))
+NYAN_FUNC(bool, nvSetFontDefaultSym, (unsigned int id, unsigned int sym))
+NYAN_FUNC(bool, nvSetFontEmptySymFromDefault, (unsigned int id));
 NYAN_FUNC(bool, nvDraw2dText, (const wchar_t *text, int posx, int posy, unsigned int fontid, unsigned int texid, float scalex, float scaley, unsigned int color))
 NYAN_FUNC(bool, nvDraw2dTextbox, (wchar_t *textbuf, int *status, unsigned int maxsize, wchar_t csym, unsigned int catime, int posx, int posy, unsigned int fontid, unsigned int texid, float scalex, float scaley, unsigned int color, unsigned int color_focused))
 

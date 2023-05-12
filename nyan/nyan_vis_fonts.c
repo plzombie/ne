@@ -51,6 +51,7 @@ typedef struct {
 	nek1_kpairshead_type kpairshead; // Заголовок, описывающий кернинговые пары
 	nv_kpair_ingame_type **sortedkpairs; // Кернинговые пары, разбитые по 1-му символу; sortedkpairs[symbol1] - все пары, у которых 1-й элемент равен symbol1
 	unsigned int *nofsortedkpairs; // Количества кернинговых пар для каждого символа
+	unsigned int default_sym;
 	bool used; // True - если шрифт используется
 } nv_font_type;
 
@@ -343,6 +344,8 @@ N_API bool N_APIENTRY_EXPORT nvCreateFont(const wchar_t *fname)
 		nFreeMemory(kpairs);
 	}
 
+	nv_fonts[i].default_sym = 0;
+
 	i++;
 
 	nFileClose(f);
@@ -419,6 +422,79 @@ N_API void N_APIENTRY_EXPORT nvDestroyAllFonts(void)
 		nv_allocfonts = 0;
 		nv_maxfonts = 0;
 	}
+}
+
+/*
+	Функция	: nvSetFontDefaultSym
+
+	Описание: Если символ sym существует в шрифте, то устанавливает sym как символ по умолчанию.
+		Этот символ будет выводиться, если глиф отсутствует в шрифте.
+		При создании шрифта задаётся как 0.
+		В противном случае возвращает false.
+
+	История	: 12.05.23	Создан
+
+*/
+N_API bool N_APIENTRY_EXPORT nvSetFontDefaultSym(unsigned int id, unsigned int sym)
+{
+	size_t nof_block;
+	
+	if(!nv_isinit || id > nv_maxfonts || id == 0) return false;
+
+	if(!nv_fonts[id-1].used) return false;
+	
+	nof_block = sym/1024;
+	if(nof_block < nv_fonts[id-1].noofblocks) {
+		if(nv_fonts[id-1].blockalloc[nof_block]) {
+			nv_fonts[id-1].default_sym = sym;
+			
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+/*
+	Функция	: nvSetFontEmptySymFromDefault
+
+	Описание: Если символ по умолчанию существует, заменяет им все пустые глифы и возвращает true. 
+		В противном случае возвращает false.
+
+	История	: 12.05.23	Создан
+
+*/
+N_API bool N_APIENTRY_EXPORT nvSetFontEmptySymFromDefault(unsigned int id)
+{
+	size_t nof_block, nof_block_el, i;
+	nek1_glyph_type default_glyph, empty_glyph;
+
+	if(!nv_isinit || id > nv_maxfonts || id == 0) return false;
+
+	if(!nv_fonts[id-1].used) return false;
+	
+	nof_block = nv_fonts[id-1].default_sym/1024;
+	nof_block_el = nv_fonts[id-1].default_sym%1024;
+	if(nof_block < nv_fonts[id-1].noofblocks) {
+		if(!nv_fonts[id-1].blockalloc[nof_block])
+			return false;
+	} else
+		return false;
+	
+	memset(&empty_glyph, 0, sizeof(nek1_glyph_type));
+	memcpy(&default_glyph, nv_fonts[id-1].glyphs[nof_block]+nof_block_el, sizeof(nek1_glyph_type));
+	for(i = 0; i < nv_fonts[id-1].noofblocks; i++) {
+		size_t j;
+		
+		if(!nv_fonts[id-1].blockalloc[i]) continue;
+		
+		for(j = 0; j < 1024; j++) {
+			if(!memcmp(nv_fonts[id-1].glyphs[i]+j, &empty_glyph, sizeof(nek1_glyph_type)))
+				memcpy(nv_fonts[id-1].glyphs[i]+j, &default_glyph, sizeof(nek1_glyph_type));
+		}
+	}
+	
+	return true;
 }
 
 /*
@@ -556,10 +632,10 @@ N_API bool N_APIENTRY_EXPORT nvDraw2dText(const wchar_t *text, int posx, int pos
 					} else
 						havechar = false;
 
-					if(havechar == false && font->noofblocks > 0) {
-						if(font->blockalloc[0]) { // Пытаемся прочитать символ 0, если символ sym отсутствует в шрифте 
+					if(havechar == false && font->noofblocks > font->default_sym/1024) {
+						if(font->blockalloc[font->default_sym/1024]) { // Пытаемся прочитать символ font->default_sym, если символ sym отсутствует в шрифте 
 							havechar = true;
-							glyph = font->glyphs[0];
+							glyph = font->glyphs[font->default_sym/1024]+(font->default_sym%1024);
 							if(glyph->hei > maxghei) maxghei = glyph->hei;
 						}
 					}

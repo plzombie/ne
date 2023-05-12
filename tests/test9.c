@@ -38,6 +38,7 @@ NYAN_MAIN
 	texid = nvCreateTextureFromFile(L"deffont.tga", NGL_TEX_FLAGS_LINEARMIN|NGL_TEX_FLAGS_LINEARMAG|NGL_TEX_FLAGS_FOR2D);
 	nvLoadTexture(texid);
 	fontid = nvCreateFont(L"deffont.nek1");
+	nvSetFontEmptySymFromDefault(fontid);
 	while(gameloop) {
 		if(nvGetStatusi(NV_STATUS_WIN_EXITMSG)) gameloop = false;
 		if(nvGetKey(27)) gameloop = false;
