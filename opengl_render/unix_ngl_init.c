@@ -76,6 +76,7 @@ static uintptr_t ngl_win_separate_hRCs_synch_mutex = 0;
 
 static timer_t ngl_win_updatetimerid; // Таймер для отрисовки окна через заданный промежуток времени
 static bool ngl_win_timerneedcancel = false;
+static bool ngl_win_timercreated = false;
 static struct sigevent ngl_win_sevp;
 static sigset_t ngl_win_updatesigset; // Набор сигналов при вызове таймера обновления
 static struct sigaction ngl_win_updatesigaction, ngl_win_oldsigaction;
@@ -612,16 +613,20 @@ bool nglInitWindow(void)
 		if(timer_create(CLOCK_MONOTONIC, &ngl_win_sevp, &ngl_win_updatetimerid) != 0) {
 			ngl_win_updatetimerid = 0;
 			ngl_win_updateinterval = 0;
+			ngl_win_timercreated = false;
 			ngl_ea->nlPrint(LOG_FDEBUGFORMAT, F_NGLINITWINDOW, ERR_FAILEDTOCREATETIMER);
-		} /*else
-			ngl_ea->nlPrint(LOG_FDEBUGFORMAT3, F_NGLINITWINDOW, L"Created timer, id", ngl_win_updatetimerid);*/
+		} else {
+			ngl_win_timercreated = true;
+			//ngl_ea->nlPrint(LOG_FDEBUGFORMAT3, F_NGLINITWINDOW, L"Created timer, id", ngl_win_updatetimerid);
+		}
 	} else {
 		ngl_win_updatetimerid = 0;
 		ngl_win_updateinterval = 0;
+		ngl_win_timercreated = false;
 		ngl_ea->nlPrint(LOG_FDEBUGFORMAT, F_NGLINITWINDOW, ERR_FAILEDTOCREATETIMER);
 	}
 	ngl_win_timerneedcancel = false;
-	if(ngl_win_updateinterval != 0) {
+	if(ngl_win_timercreated == true && ngl_win_updateinterval != 0) {
 		struct itimerspec new_value;
 
 		//ngl_ea->nlPrint(L"Set timer to %d", ngl_win_updateinterval);
@@ -683,12 +688,13 @@ bool nglCloseWindow(void)
 
 	XCloseDisplay(ngl_win_dpy);
 
-	if(ngl_win_updatetimerid != 0) {
+	if(ngl_win_timercreated == true) {
 		//ngl_ea->nlPrint(L"Free timer (id %d)", ngl_win_updatetimerid);
 		timer_delete(ngl_win_updatetimerid);
 		ngl_win_updatetimerid = 0;
 		ngl_win_updateinterval = 0;
-
+		ngl_win_timercreated = false;
+		
 		sigaction(SIGUSR1, &ngl_win_oldsigaction, NULL);
 	}
 
@@ -718,7 +724,7 @@ void nglUpdateWindow(void)
 		int sig = 0;
 
 		if(sigwait(&ngl_win_updatesigset, &sig) == 0) { // Успех
-			if(ngl_win_timerneedcancel == true) {
+			if(ngl_win_timercreated == true && ngl_win_timerneedcancel == true) {
 				struct itimerspec new_value;
 
 				ngl_win_timerneedcancel = false;
@@ -901,7 +907,7 @@ void nglChangeUpdateInterval(unsigned int updateinterval)
 	if(ngl_win_updateinterval == updateinterval) return;
 
 	if(ngl_isinit) {
-		if(ngl_win_updatetimerid != 0) {
+		if(ngl_win_timercreated == true) {
 			if(updateinterval == 0)
 				ngl_win_timerneedcancel = true;
 			else {
