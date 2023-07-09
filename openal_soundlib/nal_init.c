@@ -144,9 +144,9 @@ N_API bool N_APIENTRY_EXPORT nalClose(void)
 	nalDestroyAllSources();
 	nalDestroyAllBuffers();
 	
+	nalDestroyAST(); // Вызывается до "na_isinit = false;"
+
 	nal_isinit = false;
-	
-	nalDestroyAST(); // Вызывается после "na_isinit = false;"
 	
 	alcMakeContextCurrent(0);
 	alcDestroyContext(nal_alcontext);

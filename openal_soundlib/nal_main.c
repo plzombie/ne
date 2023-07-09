@@ -1139,137 +1139,134 @@ static unsigned int nalUpdateAudioStreamBuffer(unsigned int i, unsigned int curr
 */
 void N_APIENTRY nalASTaskFunc(void *parm)
 {
+	int error;
+	unsigned int i, j;
+	unsigned int tempbuf, curaf, curraf;
+	int processed;
+
 	(void)parm; // Неиспользуемая переменная
 
-	if(nal_isinit)
-	{
-		int error;
-		unsigned int i, j;
-		unsigned int tempbuf, curaf, curraf;
-		int processed;
+	//nal_ea->nlPrint(L"nal_isinit %d", nal_isinit);
+	nalASLock();
+	for(i = 0;i < nal_maxaudiostreams;i++) {
+		//nal_ea->nlPrint(L"processing %d", i);
+		if(nal_audiostreams[i].used) {
+			curaf = nal_audiostreams[i].curaf; // Файл, проигрываемый в данный момент
+			curraf = nal_audiostreams[i].curraf; // Файл, с которого происходит чтение с диска
+			if(nal_audiostreams[i].mustreload && nal_audiostreams[i].status == NAL_SSOURCE_PLAY) {
+				for(j = 0;j < nal_audiostreams[i].nobs;j++) {
+					//wprintf(L"process i %d c %d < %d cr %d < %d\n",i,nal_audiostreams[i].curpos,nal_audiostreams[i].secs[curraf],nal_audiostreams[i].currpos,nal_audiostreams[i].secs[curraf]);
 
-		//nal_ea->nlPrint(L"nal_isinit %d", nal_isinit);
-		nalASLock();
-		for(i = 0;i < nal_maxaudiostreams;i++) {
-			//nal_ea->nlPrint(L"processing %d", i);
-			if(nal_audiostreams[i].used) {
-				curaf = nal_audiostreams[i].curaf; // Файл, проигрываемый в данный момент
-				curraf = nal_audiostreams[i].curraf; // Файл, с которого происходит чтение с диска
-				if(nal_audiostreams[i].mustreload && nal_audiostreams[i].status == NAL_SSOURCE_PLAY) {
-					for(j = 0;j < nal_audiostreams[i].nobs;j++) {
-						//wprintf(L"process i %d c %d < %d cr %d < %d\n",i,nal_audiostreams[i].curpos,nal_audiostreams[i].secs[curraf],nal_audiostreams[i].currpos,nal_audiostreams[i].secs[curraf]);
+					curraf = nalUpdateAudioStreamBuffer(i, curraf, nal_audiostreams[i].bufid+j);
+					if(curaf != curraf && 
+						(nal_audiostreams[i].aud[curaf].bps  != nal_audiostreams[i].aud[curraf].bps ||
+						nal_audiostreams[i].aud[curaf].freq != nal_audiostreams[i].aud[curraf].freq ||
+						nal_audiostreams[i].aud[curaf].noc  != nal_audiostreams[i].aud[curraf].noc))
+						break;
+				}
+				nal_audiostreams[i].mustreload = false;
+				alSourcePlay(nal_audiostreams[i].alid);
+			} else if(nal_audiostreams[i].mustreload && (nal_audiostreams[i].status == NAL_SSOURCE_STOP || nal_audiostreams[i].status == NAL_SSOURCE_REPLAY || nal_audiostreams[i].status == NAL_SSOURCE_GOTO || nal_audiostreams[i].status == NAL_SSOURCE_GOTO_PLAY)) {
+				ALenum error;
 
-						curraf = nalUpdateAudioStreamBuffer(i, curraf, nal_audiostreams[i].bufid+j);
+				if(!(nal_audiostreams[i].status == NAL_SSOURCE_GOTO || nal_audiostreams[i].status == NAL_SSOURCE_GOTO_PLAY)) {
+					nal_audiostreams[i].curpos = 0;
+					nal_audiostreams[i].currpos = 0;
+					nal_audiostreams[i].curaf = 0;
+					nal_audiostreams[i].curraf = 0;
+				}
+
+				alGetError();
+
+				alSourceStop(nal_audiostreams[i].alid);
+				error = alGetError();
+				if(error)
+					nal_ea->nlPrint(L"nalASTaskFunc(): openal error %d in line %d", error, __LINE__);
+
+				nal_ea->nSleep(SERVICE_UPDATE_PERIOD);
+
+				alGetSourcei(nal_audiostreams[i].alid, AL_BUFFERS_PROCESSED, &processed);
+				while(processed){
+					processed--;
+					alSourceUnqueueBuffers(nal_audiostreams[i].alid, 1, &tempbuf);
+				}
+				error = alGetError();
+				if(error)
+					nal_ea->nlPrint(L"nalASTaskFunc(): openal error %d in line %d", error, __LINE__);
+
+				if(nal_audiostreams[i].status == NAL_SSOURCE_REPLAY || nal_audiostreams[i].status == NAL_SSOURCE_GOTO_PLAY)
+					nal_audiostreams[i].status = NAL_SSOURCE_PLAY;
+				else
+					nal_audiostreams[i].mustreload = false;
+			} else if(nal_audiostreams[i].status == NAL_SSOURCE_PLAY) {
+				ALint state;
+
+				alGetSourcei(nal_audiostreams[i].alid, AL_BUFFERS_PROCESSED, &processed);
+				while(processed){
+					ALint queued;
+
+					//wprintf(L"process i %d c %d < %d cr %d < %d\n",i,nal_audiostreams[i].curpos,nal_audiostreams[i].secs[curaf],nal_audiostreams[i].currpos,nal_audiostreams[i].secs[curraf]);
+
+					if((nal_audiostreams[i].curpos+1) == nal_audiostreams[i].secs[curaf] && !nal_audiostreams[i].loop && (nal_audiostreams[i].curaf+1) == nal_audiostreams[i].noafs) {
+						nal_audiostreams[i].status = NAL_SSOURCE_STOP;
+						nal_audiostreams[i].mustreload = true;
+						processed = 0;
+					} else {
+						processed--;
+
+						tempbuf = 0;
+						alSourceUnqueueBuffers(nal_audiostreams[i].alid, 1, &tempbuf);
+
 						if(curaf != curraf && 
 							(nal_audiostreams[i].aud[curaf].bps  != nal_audiostreams[i].aud[curraf].bps ||
 							nal_audiostreams[i].aud[curaf].freq != nal_audiostreams[i].aud[curraf].freq ||
-							nal_audiostreams[i].aud[curaf].noc  != nal_audiostreams[i].aud[curraf].noc))
-							break;
-					}
-					nal_audiostreams[i].mustreload = false;
-					alSourcePlay(nal_audiostreams[i].alid);
-				} else if(nal_audiostreams[i].mustreload && (nal_audiostreams[i].status == NAL_SSOURCE_STOP || nal_audiostreams[i].status == NAL_SSOURCE_REPLAY || nal_audiostreams[i].status == NAL_SSOURCE_GOTO || nal_audiostreams[i].status == NAL_SSOURCE_GOTO_PLAY)) {
-					ALenum error;
+							nal_audiostreams[i].aud[curaf].noc  != nal_audiostreams[i].aud[curraf].noc)) { // Если начали читать следующий аудиофайл, и их параметры не совпадают
 
-					if(!(nal_audiostreams[i].status == NAL_SSOURCE_GOTO || nal_audiostreams[i].status == NAL_SSOURCE_GOTO_PLAY)) {
-						nal_audiostreams[i].curpos = 0;
-						nal_audiostreams[i].currpos = 0;
-						nal_audiostreams[i].curaf = 0;
-						nal_audiostreams[i].curraf = 0;
-					}
+							alGetSourcei(nal_audiostreams[i].alid, AL_BUFFERS_QUEUED, &queued);
 
-					alGetError();
+							/*wprintf(L"processed %d queued %d bps %u/%u freq %u %u noc %u %u\n", processed, queued,
+								nal_audiostreams[i].aud[curaf].bps, nal_audiostreams[i].aud[curraf].bps,
+								nal_audiostreams[i].aud[curaf].freq, nal_audiostreams[i].aud[curraf].freq,
+								nal_audiostreams[i].aud[curaf].noc, nal_audiostreams[i].aud[curraf].noc);*/
 
-					alSourceStop(nal_audiostreams[i].alid);
-					error = alGetError();
-					if(error)
-						nal_ea->nlPrint(L"nalASTaskFunc(): openal error %d in line %d", error, __LINE__);
-
-					nal_ea->nSleep(SERVICE_UPDATE_PERIOD);
-
-					alGetSourcei(nal_audiostreams[i].alid, AL_BUFFERS_PROCESSED, &processed);
-					while(processed){
-						processed--;
-						alSourceUnqueueBuffers(nal_audiostreams[i].alid, 1, &tempbuf);
-					}
-					error = alGetError();
-					if(error)
-						nal_ea->nlPrint(L"nalASTaskFunc(): openal error %d in line %d", error, __LINE__);
-
-					if(nal_audiostreams[i].status == NAL_SSOURCE_REPLAY || nal_audiostreams[i].status == NAL_SSOURCE_GOTO_PLAY)
-						nal_audiostreams[i].status = NAL_SSOURCE_PLAY;
-					else
-						nal_audiostreams[i].mustreload = false;
-				} else if(nal_audiostreams[i].status == NAL_SSOURCE_PLAY) {
-					ALint state;
-
-					alGetSourcei(nal_audiostreams[i].alid, AL_BUFFERS_PROCESSED, &processed);
-					while(processed){
-						ALint queued;
-
-						//wprintf(L"process i %d c %d < %d cr %d < %d\n",i,nal_audiostreams[i].curpos,nal_audiostreams[i].secs[curaf],nal_audiostreams[i].currpos,nal_audiostreams[i].secs[curraf]);
-
-						if((nal_audiostreams[i].curpos+1) == nal_audiostreams[i].secs[curaf] && !nal_audiostreams[i].loop && (nal_audiostreams[i].curaf+1) == nal_audiostreams[i].noafs) {
-							nal_audiostreams[i].status = NAL_SSOURCE_STOP;
-							nal_audiostreams[i].mustreload = true;
-							processed = 0;
-						} else {
-							processed--;
-
-							tempbuf = 0;
-							alSourceUnqueueBuffers(nal_audiostreams[i].alid, 1, &tempbuf);
-
-							if(curaf != curraf && 
-								(nal_audiostreams[i].aud[curaf].bps  != nal_audiostreams[i].aud[curraf].bps ||
-								nal_audiostreams[i].aud[curaf].freq != nal_audiostreams[i].aud[curraf].freq ||
-								nal_audiostreams[i].aud[curaf].noc  != nal_audiostreams[i].aud[curraf].noc)) { // Если начали читать следующий аудиофайл, и их параметры не совпадают
-
-								alGetSourcei(nal_audiostreams[i].alid, AL_BUFFERS_QUEUED, &queued);
-
-								/*wprintf(L"processed %d queued %d bps %u/%u freq %u %u noc %u %u\n", processed, queued,
-									nal_audiostreams[i].aud[curaf].bps, nal_audiostreams[i].aud[curraf].bps,
-									nal_audiostreams[i].aud[curaf].freq, nal_audiostreams[i].aud[curraf].freq,
-									nal_audiostreams[i].aud[curaf].noc, nal_audiostreams[i].aud[curraf].noc);*/
-
-								if(queued == 0) {
-									//wprintf(L"1. alGetError() returns %d\n", alGetError());
-									for(j = 0;j < nal_audiostreams[i].nobs;j++) {
+							if(queued == 0) {
+								//wprintf(L"1. alGetError() returns %d\n", alGetError());
+								for(j = 0;j < nal_audiostreams[i].nobs;j++) {
 										
-										curraf = nalUpdateAudioStreamBuffer(i, curraf, nal_audiostreams[i].bufid + j);
-									}
-									//wprintf(L"2. alGetError() returns %d\n", alGetError());
+									curraf = nalUpdateAudioStreamBuffer(i, curraf, nal_audiostreams[i].bufid + j);
 								}
-							} else
-								curraf = nalUpdateAudioStreamBuffer(i, curraf, &tempbuf);
-
-							nal_audiostreams[i].curpos++;
-							if(nal_audiostreams[i].curpos == nal_audiostreams[i].secs[curaf]) {
-								nal_audiostreams[i].curpos = 0;
-								nal_audiostreams[i].curaf++;
-								if(nal_audiostreams[i].curaf == nal_audiostreams[i].noafs)
-									nal_audiostreams[i].curaf = 0;
-								curaf = nal_audiostreams[i].curaf;
+								//wprintf(L"2. alGetError() returns %d\n", alGetError());
 							}
+						} else
+							curraf = nalUpdateAudioStreamBuffer(i, curraf, &tempbuf);
 
+						nal_audiostreams[i].curpos++;
+						if(nal_audiostreams[i].curpos == nal_audiostreams[i].secs[curaf]) {
+							nal_audiostreams[i].curpos = 0;
+							nal_audiostreams[i].curaf++;
+							if(nal_audiostreams[i].curaf == nal_audiostreams[i].noafs)
+								nal_audiostreams[i].curaf = 0;
+							curaf = nal_audiostreams[i].curaf;
 						}
 
-						//wprintf(L"00. alGetError() returns %d\n", alGetError());
-						alGetSourcei(nal_audiostreams[i].alid, AL_BUFFERS_QUEUED, &queued);
-						//wprintf(L"01. alGetError() returns %d\n", alGetError());	
 					}
 
-					alGetSourcei(nal_audiostreams[i].alid, AL_SOURCE_STATE, &state);
-					if (state != AL_PLAYING) {
-						//wprintf(L"02. alGetError() returns %d\n", alGetError());
-						alSourcePlay(nal_audiostreams[i].alid);
-						//wprintf(L"03. alGetError() returns %d\n", alGetError());
-					}
+					//wprintf(L"00. alGetError() returns %d\n", alGetError());
+					alGetSourcei(nal_audiostreams[i].alid, AL_BUFFERS_QUEUED, &queued);
+					//wprintf(L"01. alGetError() returns %d\n", alGetError());	
+				}
+
+				alGetSourcei(nal_audiostreams[i].alid, AL_SOURCE_STATE, &state);
+				if(state != AL_PLAYING) {
+					//wprintf(L"02. alGetError() returns %d\n", alGetError());
+					alSourcePlay(nal_audiostreams[i].alid);
+					//wprintf(L"03. alGetError() returns %d\n", alGetError());
 				}
 			}
 		}
-		nalASUnlock();
-		error = alGetError(); if(error) nal_ea->nlPrint(ERR_OPENAL, error);
 	}
+	nalASUnlock();
+	error = alGetError(); if(error) nal_ea->nlPrint(ERR_OPENAL, error);
 	//nal_ea->nlPrint(L"exit from nalASTaskFunc");
 }
 
@@ -1308,7 +1305,7 @@ bool nalCreateAST(void)
 	Функция	: nalDestroyAST
 
 	Описание: Уничтожает задачу
-		Вызывается после "nal_isinit = false;"
+		Вызывается до "nal_isinit = false;"
 
 	История	: 14.09.12	Создан
 
