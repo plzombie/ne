@@ -870,7 +870,9 @@ N_API void N_APIENTRY_EXPORT nalSetAudioStreamLoop(unsigned int id, int loop)
 
 	if(!nal_audiostreams[id-1].used) return;
 
-	nal_audiostreams[id-1].loop = loop;
+	nalASLock();
+		nal_audiostreams[id-1].loop = loop;
+	nalASUnlock();
 }
 
 /*
@@ -887,8 +889,10 @@ N_API void N_APIENTRY_EXPORT nalGetAudioStreamSecOffset(unsigned int id, unsigne
 
 	if(!nal_audiostreams[id-1].used) return;
 
-	*offset = nal_audiostreams[id-1].curpos;
-	*track = nal_audiostreams[id-1].curaf;
+	nalASLock();
+		*offset = nal_audiostreams[id-1].curpos;
+		*track = nal_audiostreams[id-1].curaf;
+	nalASUnlock();
 }
 
 /*
@@ -934,8 +938,10 @@ N_API void N_APIENTRY_EXPORT nalGetAudioStreamLength(unsigned int id, unsigned i
 
 	if(!nal_audiostreams[id-1].used) return;
 
-	*length = nal_audiostreams[id-1].secs[nal_audiostreams[id-1].curaf];
-	*tracks = nal_audiostreams[id-1].noafs;
+	nalASLock();
+		*length = nal_audiostreams[id-1].secs[nal_audiostreams[id-1].curaf];
+		*tracks = nal_audiostreams[id-1].noafs;
+	nalASUnlock();
 }
 
 /*
@@ -993,20 +999,22 @@ N_API unsigned int N_APIENTRY_EXPORT nalGetAudioStreamStatus(unsigned int id)
 
 	if(!nal_audiostreams[id-1].used) return NA_SOURCE_FREE;
 
-	switch(nal_audiostreams[id-1].status) {
-		case NAL_SSOURCE_STOP:
-			status = NA_SOURCE_STOP;
-			break;
-		case NAL_SSOURCE_PLAY:
-		case NAL_SSOURCE_REPLAY:
-		case NAL_SSOURCE_GOTO_PLAY:
-			status = NA_SOURCE_PLAY;
-			break;
-		case NAL_SSOURCE_PAUSE:
-		case NAL_SSOURCE_GOTO:
-			status = NA_SOURCE_PAUSE;
-			break;
-	}
+	nalASLock();
+		switch(nal_audiostreams[id-1].status) {
+			case NAL_SSOURCE_STOP:
+				status = NA_SOURCE_STOP;
+				break;
+			case NAL_SSOURCE_PLAY:
+			case NAL_SSOURCE_REPLAY:
+			case NAL_SSOURCE_GOTO_PLAY:
+				status = NA_SOURCE_PLAY;
+				break;
+			case NAL_SSOURCE_PAUSE:
+			case NAL_SSOURCE_GOTO:
+				status = NA_SOURCE_PAUSE;
+				break;
+		}
+	nalASUnlock();
 
 	return status;
 }
