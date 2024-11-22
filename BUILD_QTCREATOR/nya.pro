@@ -11,6 +11,7 @@ SUBDIRS = \
     plgqoi \
     plgstb_image \
     plgstb_vorbis \
+    plgminimp3 \
     plgwavpack
 
 SUBDIRS += nya

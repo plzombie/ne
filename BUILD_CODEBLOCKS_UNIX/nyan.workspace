@@ -79,6 +79,7 @@
 		<Project filename="plgkplib_files/plgkplib_files.cbp" />
 		<Project filename="plgstb_image/plgstb_image.cbp" />
 		<Project filename="plgstb_vorbis/plgstb_vorbis.cbp" />
+		<Project filename="plgminimp3/plgminimp3.cbp" />
 		<Project filename="colorlines2013/colorlines2013.cbp">
 			<Depends filename="nya/nya.cbp" />
 		</Project>

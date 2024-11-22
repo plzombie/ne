@@ -7,3 +7,6 @@
 [submodule "forks/qoi"]
 	path = forks/qoi
 	url = https://github.com/phoboslab/qoi.git
+[submodule "forks/minimp3"]
+	path = forks/minimp3
+	url = https://github.com/lieff/minimp3
