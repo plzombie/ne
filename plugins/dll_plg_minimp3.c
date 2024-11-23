@@ -66,7 +66,7 @@ size_t callbackRead(void *buf, size_t size, void *data)
 	История	: 22.11.24	Создан
 
 */
-size_t callbackSeek(uint64_t pos, void *data)
+int callbackSeek(uint64_t pos, void *data)
 {
 	return ea->nFileSeek((unsigned int)data, pos, FILE_SEEK_SET) != pos;
 }
@@ -200,15 +200,28 @@ bool N_APIENTRY minimp3_plgRead(unsigned int offset, unsigned int nofs, void *bu
 {
 	minimp3_plgdata_type *plgdata;
 	uint64_t position;
+	int dec_hz, dec_channels;
+	unsigned int aud_noc;
 
 	plgdata = (minimp3_plgdata_type *)aud->plgdata;
 
-	position = plgdata->dec.info.hz*plgdata->dec.info.channels*offset;
+	aud_noc = aud->noc;
+
+	dec_hz = plgdata->dec.info.hz;
+	dec_channels = plgdata->dec.info.channels;
+
+	if(dec_channels != aud_noc) return false;
+	if(dec_hz != aud->freq) return false;
+
+	if(UINT64_MAX/dec_hz < dec_channels) return false;
+	if(UINT64_MAX/((uint64_t)dec_hz*(uint64_t)dec_channels) < offset) return false;
+
+	position = (uint64_t)dec_hz*(uint64_t)dec_channels*offset;
 
 	if(plgdata->dec.cur_sample != position)
 		if(mp3dec_ex_seek(&plgdata->dec, position)) return false;
 
-	if(mp3dec_ex_read(&plgdata->dec, (mp3d_sample_t *)buf, nofs*aud->noc) != nofs) {
+	if(mp3dec_ex_read(&plgdata->dec, (mp3d_sample_t *)buf, nofs*aud_noc) != nofs*aud_noc) {
 		if(plgdata->dec.last_error)
 			return false;
 	}
