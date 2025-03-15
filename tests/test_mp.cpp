@@ -7,8 +7,6 @@
 #include "../forks/mparticles/platform_win_posix.h"
 #include "../forks/mparticles/mp_wrap.h"
 
-const int CWHITE = NV_COLOR(255,255,255,255);
-
 NYAN_MAIN
 {
 	int client_wi = 800;
