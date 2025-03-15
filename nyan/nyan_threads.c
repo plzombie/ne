@@ -34,7 +34,7 @@
 #include "nyan_fps_publicapi.h"
 #include "nyan_mem_publicapi.h"
 
-#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
+#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__) && (!defined(_WIN32) || !defined(__clang__))
 	static void Sleep(int ms)
 	{
 		struct timespec duration, remaining;
@@ -92,7 +92,7 @@ static unsigned int n_alloctasks = 0;
 
 static unsigned int n_nofrealthreads = 0; // Количество реальных потоков, которые были созданы в системе
 
-#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
+#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__) && (!defined(_WIN32) || !defined(__clang__))
 	static int nThreadsLib_threadproc(void *args);
 	static thrd_t n_thlib_localthread;
 #elif defined(N_WINDOWS)
@@ -131,7 +131,7 @@ bool nInitThreadsLib(void)
 	n_nofrealthreads = 0;
 	n_maxtasks = 0;
 	n_alloctasks = 0;
-#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
+#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__) && (!defined(_WIN32) || !defined(__clang__)) && (!defined(_WIN32) || !defined(__clang__))
 	if(thrd_create(&n_thlib_localthread, nThreadsLib_threadproc, NULL) == thrd_success)
 		n_nofrealthreads = 1;
 #elif defined(N_WINDOWS)
@@ -182,7 +182,7 @@ bool nDestroyThreadsLib(void)
 
 	nUnlockSystemMutex(&n_thlib_localmutex);
 
-#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
+#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__) && (!defined(_WIN32) || !defined(__clang__))
 	if(n_nofrealthreads)
 		thrd_join(n_thlib_localthread, NULL);
 #elif defined(N_WINDOWS)
@@ -276,7 +276,7 @@ void nUpdateThreadsLib(void)
 
 #if defined(N_WINDOWS) || defined(N_POSIX) || defined(N_ANDROID) || (__STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__))
 
-#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
+#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__) && (!defined(_WIN32) || !defined(__clang__))
 int nThreadsLib_threadproc(void *args)
 #elif defined(N_WINDOWS)
 /*pure winapi version (do not use)*///DWORD WINAPI nThreadsLib_threadproc(/*_In_  */LPVOID args)
@@ -705,7 +705,7 @@ N_API bool N_APIENTRY_EXPORT nUnlockMutex(uintptr_t mutexid)
 */
 bool nCreateSystemMutex(n_sysmutex_type *mutex)
 {
-#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
+#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__) && (!defined(_WIN32) || !defined(__clang__))
 	if(mtx_init(mutex, mtx_plain|mtx_recursive) == thrd_success)
 		return true;
 	else
@@ -747,7 +747,7 @@ bool nCreateSystemMutex(n_sysmutex_type *mutex)
 */
 bool nDestroySystemMutex(n_sysmutex_type *mutex)
 {
-#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
+#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__) && (!defined(_WIN32) || !defined(__clang__))
 	mtx_destroy(mutex);
 
 	return true;
@@ -784,7 +784,7 @@ bool nDestroySystemMutex(n_sysmutex_type *mutex)
 void nLockSystemMutex(n_sysmutex_type *mutex)
 {
 	//wprintf(L"n  LockSystemMutex ptr:%lld thread_id:%d\n", (long long)mutex, GetCurrentThreadId());
-#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
+#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__) && (!defined(_WIN32) || !defined(__clang__))
 	mtx_lock(mutex); // Нужна проверка на возврат thrd_success
 #elif defined(N_WINDOWS)
 	assert(*mutex != 0);
@@ -805,7 +805,7 @@ void nLockSystemMutex(n_sysmutex_type *mutex)
 bool nTryLockSystemMutex(n_sysmutex_type *mutex)
 {
 	//wprintf(L"n  LockSystemMutex ptr:%lld thread_id:%d\n", (long long)mutex, GetCurrentThreadId());
-#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
+#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__) && (!defined(_WIN32) || !defined(__clang__))
 	if(mtx_trylock(mutex) == thrd_success)
 		return true;
 	else
@@ -837,7 +837,7 @@ bool nTryLockSystemMutex(n_sysmutex_type *mutex)
 void nUnlockSystemMutex(n_sysmutex_type *mutex)
 {
 	//wprintf(L"nUnlockSystemMutex ptr:%lld thread_id:%d\n", (long long)mutex, GetCurrentThreadId());
-#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
+#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__) && (!defined(_WIN32) || !defined(__clang__))
 	mtx_unlock(mutex); // Нужна проверка на возврат thrd_success
 #elif defined(N_WINDOWS)
 	assert(*mutex != 0);
