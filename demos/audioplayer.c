@@ -47,6 +47,7 @@ int wmain(int argc, wchar_t **argv)
 
 	nAddPlugin(L"plgwavpack");
 	nAddPlugin(L"plgstb_vorbis");
+	nAddPlugin(L"plgminimp3");
 	nAddPlugin(L"plglibopenmpt");
 
 	if(!nInit())
