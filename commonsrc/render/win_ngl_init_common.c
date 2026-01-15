@@ -503,10 +503,14 @@ void nglChangeWindowMode(unsigned int winx, unsigned int winy, int winmode)
 		}
 	} else if(ngl_winmode == NV_MODE_FULLSCREEN) { // winmode != NV_MODE_FULLSCREEN, а ngl_winmode == NV_MODE_FULLSCREEN
 		ChangeDisplaySettings(NULL, 0); // Возвращение на рабочий стол
+
+		// Обрабатываем WM_DPICHANGED, возникающий после ChangeDisplaySettings
+		nglProcessWindowMessages();
+
 		GetWindowRect(ngl_win_hWnd, &window_rect);
 		nglGetDpiForWindow(&ngl_windpix, &ngl_windpiy, ngl_win_hWnd, window_rect.left, window_rect.top);
 
-		// Обрабатываем WM_DPICHANGED, возникающий после ChangeDisplaySettings
+		// Ещё раз обрабатываем WM_DPICHANGED, возникающий после ChangeDisplaySettings
 		nglProcessWindowMessages();
 	}
 	
